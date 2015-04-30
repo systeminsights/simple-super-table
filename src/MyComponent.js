@@ -1,11 +1,11 @@
 /**
- * Copyright (c) Your Company. All rights reserved.
+ * Copyright (c) System Insights Inc.. All rights reserved.
  */
 
-import React from 'react'; // eslint-disable-line no-unused-vars
+import React from 'react';
 import './MyComponent.less';
 
-class MyComponent {
+class MyComponent extends React.component {
 
   render() {
     return (
