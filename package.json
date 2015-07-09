@@ -19,7 +19,7 @@
     "build-dist": "webpack --release",
     "serve": "browser-sync start --server --files \"index.html,build/**\"",
     "start": "parallelshell \"npm run build\" \"npm run serve\"",
-    "test": "eslint src"
+    "test": "./node_modules/.bin/mocha test"
   },
   "dependencies": {
     "react": "^0.13.2"
@@ -27,19 +27,26 @@
   "devDependencies": {
     "autoprefixer-core": "^5.1.11",
     "autoprefixer-loader": "^1.2.0",
+    "babel": "^5.6.14",
     "babel-core": "^5.2.13",
     "babel-eslint": "^3.0.1",
     "babel-loader": "^5.0.0",
     "browser-sync": "^2.7.1",
+    "chai": "^3.0.0",
     "css-loader": "^0.12.0",
     "del": "^1.1.1",
     "eslint": "^0.20.0",
     "eslint-loader": "^0.11.1",
     "eslint-plugin-react": "^2.2.0",
+    "jquery": "^2.1.4",
+    "jsdom": "^5.6.0",
     "less": "^2.5.0",
     "less-loader": "^2.2.0",
     "minimist": "^1.1.1",
+    "mocha": "^2.2.5",
     "parallelshell": "^1.1.1",
+    "sinon": "^1.15.4",
+    "sinon-chai": "^2.8.0",
     "style-loader": "^0.12.1",
     "url-loader": "^0.5.5",
     "webpack": "^1.8.11"

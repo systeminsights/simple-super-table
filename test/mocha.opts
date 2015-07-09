@@ -1,0 +1,4 @@
+--compilers js:babel/register
+--compilers jsx:babel/register
+--recursive
+--require ./test/init.js
