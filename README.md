@@ -1,6 +1,6 @@
 # Simple Super Table
 
-React component for rendering low volume data tables (< 250). Provides search,
+React component for rendering low volume data tables (~500). Provides search,
 sort and csv export for free.
 
 ## 2.0 - Lessons from 1.0
@@ -14,7 +14,7 @@ arrays and indexes wherever possible.
 - Request for external stylesheet, assign base classes.
 - *Always* write tests first. Make the tests as much e2e as possible.
 - Avoid splitting functionality into mixins, use helper objects instead.
-Mixins are bad cos they make assumptions about state/props.
+Mixins are bad because they make assumptions about state/props.
 - Headers can span.
 - Cache search results.
 
@@ -28,7 +28,9 @@ Mixins are bad cos they make assumptions about state/props.
 
 # Usage
 
-The component is exported as UMD, it can be included using the `<script>` tag or require'd like any other react component. The examples below use the es6 import syntax.
+The component is exported as per [UMD](https://github.com/umdjs/umd). It can be
+included using the `<script>` tag or require'd like any other react component.
+The examples below use the es6 import syntax.
 
 ## Props
 
@@ -56,7 +58,8 @@ const data = [
 ### columns
 
 **Required**, array of objects. Orders the column to display and each key value
-pair specifies the column key and the corresponding label for that column. columns can be nested to render spanned headers.
+pair specifies the column key and the corresponding label for that column.
+columns can be nested to render spanned headers.
 
 ```js
 const columns = [
@@ -92,7 +95,7 @@ const primaryKeyGen = function primaryKeyGen(rowData) {
 
 Optional, object. Custom renderer functions for columns. Expects the key to be
 column keys and values to be functions. The function will be invoked with
-column data, row data, column key and search text.
+column data, row data, column key and filter text.
 
 ```js
 const columnRenderers = {
@@ -105,23 +108,53 @@ const columnRenderers = {
 
 ### rowClassGetter
 
-(TODO)
+Optional, function. Return a CSS class for the given row. The function will be
+invoked for each row with the corresponding row data.
+
+```js
+const rowClassGetter = function rowClassGetter(rowData) {
+  return 'my-own-class';
+};
+```
 
 ### columnClassGetter
 
-(TODO)
+Optional, function. Return a CSS class for the given column. The function will
+be invoked for each column with the corresponding column data, row data and
+column key.
+
+```js
+const columnClassGetter = function columnClassGetter(colData, rowData, colKey) {
+  return 'my-own-class';
+};
+```
 
 ### onRowClick
 
-(TODO)
+Optional, function. Sets a handler for row click events. The handler will be
+invoked with row data.
+
+```js
+const rowClickHandler = function(rowData) {
+  // ...Event handling logic...
+};
+```
 
 ### onColumnClick
 
-(TODO)
+Optional, function. Sets a handler for column click events. The handler will be
+invoked with column data, row data, column key. Specify an event handler for
+column click will cause the row click handler to be ignored.
+
+```js
+const colClickHandler = function(colData, rowData, colKey) {
+  // ...Event handling logic...  
+};
+```
 
 ### defaultSortColumn
 
-Optional, string. ColKey that should be used for sorting the table upfront.
+Optional, string. Column key that should be used for sorting the table upfront.
 Defaults to the first column specified in *columns* props.
 
 ### defaultSortAscending
@@ -131,8 +164,8 @@ Defaults to true.
 
 ### sortableColumns
 
-Optional array. Array of strings. Specify the colKeys of the sortable columns,
-defaults to everything. To disable sorting, pass an empty array.
+Optional array. Array of strings. Specify the column keys of the sortable
+columns, defaults to everything. To disable sorting, pass an empty array.
 
 ```js
 const sortableColumns = ['col1', 'col2'];
