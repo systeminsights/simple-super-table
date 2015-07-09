@@ -9,7 +9,7 @@ sort and csv export for free.
 - Take a function for primary key generation.
 - Spans are bad. Give the entire data, let the table decide what to do.
 - Rows are rows and columns are columns, no cells involved. Its easier to
-identify a data point with rowdata[columnId]. Use maps (objects) instead of
+identify a data point with rowdata[colKey]. Use maps (objects) instead of
 arrays and indexes wherever possible.
 - Request for external stylesheet, assign base classes.
 - *Always* write tests first. Make the tests as much e2e as possible.
@@ -33,6 +33,10 @@ The component is exported as UMD, it can be included using the `<script>` tag or
 ## Props
 
 The component accepts the below props.
+
+### title
+
+Optional, string. Title of the table.
 
 ### data
 
@@ -88,11 +92,11 @@ const primaryKeyGen = function primaryKeyGen(rowData) {
 
 Optional, object. Custom renderer functions for columns. Expects the key to be
 column keys and values to be functions. The function will be invoked with
-columnId, column data, row data and search text.
+column data, row data, column key and search text.
 
 ```js
 const columnRenderers = {
-  col1: function(colData, rowData, colId, filterText) {
+  col1: function(colData, rowData, colKey, filterText) {
     // text or react component.  
     return <h1>colData</h1>;
   }
@@ -117,17 +121,17 @@ const columnRenderers = {
 
 ### defaultSortColumn
 
-Optional, string. ColId that should be used for sorting the table upfront.
+Optional, string. ColKey that should be used for sorting the table upfront.
 Defaults to the first column specified in *columns* props.
 
 ### defaultSortAscending
 
 Optional, boolean. Set true to sort in the ascending direction upfront.
-Defaults to false.
+Defaults to true.
 
 ### sortableColumns
 
-Optional array. Array of strings. Specify the colIds of the sortable columns,
+Optional array. Array of strings. Specify the colKeys of the sortable columns,
 defaults to everything. To disable sorting, pass an empty array.
 
 ```js
@@ -136,7 +140,7 @@ const sortableColumns = ['col1', 'col2'];
 
 ### filterableColumns
 
-Optional array. Array of strings. Specify the colIds of the filterable columns,
+Optional array. Array of strings. Specify the colKeys of the filterable columns,
 defaults to everything. To disable sorting, pass an empty array. Filters use a
 regular expression match, numerical columns are converted to string before
 filtering.
