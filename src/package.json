@@ -1,6 +1,6 @@
 {
-  "name": "MyComponent",
+  "name": "Simple Super Table",
   "version": "0.0.0",
   "private": true,
-  "main": "./MyComponent.js"
+  "main": "./simple-super-table.jsx"
 }
