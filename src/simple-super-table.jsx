@@ -3,68 +3,8 @@ const T = React.PropTypes;
 const {LinkedStateMixin} = React.addons;
 import R from 'ramda';
 
-const dataHelpers = {
-  // :: Ord[{k : v}] -> Ord[k]
-  extractColkeys: function(columns) {
-    return R.compose(
-      R.flatten,
-      R.map(R.keys)
-    )(columns);
-  },
-
-  // :: [String] -> String -> [Object] -> [Object]
-  filterData: R.curry((filterByColKeys, filterText, data) => {
-    return R.filter(R.compose(
-        R.match(new RegExp(filterText, 'gi')),
-        R.join(' '),
-        R.map((v) => v.toString()),
-        R.props(filterByColKeys)
-    ))(data);
-  }),
-
-  // :: String -> Bool -> [Object] -> [Object]
-  sortData: R.curry((colKey, sortAscending, data) => {
-    const sortedData = R.sortBy(R.prop(colKey))(data);
-    return sortAscending ? sortedData : R.reverse(sortedData);
-  }),
-};
-
-const renderHelpers = {
-  // :: {k : v} -> ReactElement
-  renderHeader: R.curry((onClickHandler, column) => {
-    const colKey = R.head(R.keys(column));
-    return (
-      <th
-        key={colKey}
-        onClick={onClickHandler}
-        data-col-key={colKey}
-      >{column[colKey]}</th>
-    );
-  }),
-
-  // :: String -> String -> ReactElement
-  renderCol: R.curry((rowData, primaryKey, onColumnClickHandler, colKey) => {
-    return (
-      <td
-        key={colKey}
-        onClick={onColumnClickHandler}
-        data-col-key={colKey}
-        data-primary-key={primaryKey}
-        >{rowData[colKey]}</td>
-    );
-  }),
-
-  // :: ((Object) -> String) -> [String] -> Object -> ReactElement
-  renderRow: R.curry((primaryKeyGen, colKeys, onRowClickHandler, onColumnClickHandler, rowData) => {
-    return (
-      <tr
-        key={primaryKeyGen(rowData)}
-        data-primary-key={primaryKeyGen(rowData)}
-        onClick={onRowClickHandler}
-      >{R.map(renderHelpers.renderCol(rowData, primaryKeyGen(rowData), onColumnClickHandler))(colKeys)}</tr>
-    );
-  }),
-};
+import dataHelpers from './data-helpers';
+import renderHelpers from './render-helpers';
 
 // TODO: use ES6 class syntax when an alternative for mixins is available.
 const SimpleSuperTable = React.createClass({
@@ -89,12 +29,11 @@ const SimpleSuperTable = React.createClass({
   },
 
   getInitialState: function() {
-    const sortableColumns = R.isNil(this.props.sortableColumns) ?
-      dataHelpers.extractColkeys(this.props.columns) : this.props.sortableColumns;
+    const sortableColumns = R.defaultTo(dataHelpers.extractColkeys(this.props.columns), this.props.sortableColumns);
 
     return {
       filterText: '',
-      sortColKey: R.isNil(this.props.defaultSortColumn) ? sortableColumns[0] : this.props.defaultSortColumn,
+      sortColKey: R.defaultTo(sortableColumns[0], this.props.defaultSortColumn),
       sortAscending: this.props.defaultSortAscending,
     };
   },
@@ -133,13 +72,18 @@ const SimpleSuperTable = React.createClass({
 
   render: function() {
     const colKeys = dataHelpers.extractColkeys(this.props.columns);
-    const filterableColumns = R.isNil(this.props.filterableColumns) ? colKeys : this.props.filterableColumns;
-    const filteredData = R.isEmpty(filterableColumns) ?
-      this.props.data : dataHelpers.filterData(filterableColumns, this.state.filterText, this.props.data);
+    const filterableColumns = R.defaultTo(colKeys, this.props.filterableColumns);
+    const filteredData = R.ifElse(
+      R.isEmpty,
+      () => this.props.data,
+      () => dataHelpers.filterData(filterableColumns, this.state.filterText, this.props.data)
+    )(filterableColumns);
     const sortedFilteredData = dataHelpers.sortData(this.state.sortColKey, this.state.sortAscending, filteredData);
-
-    const filterTextInput = R.isEmpty(filterableColumns) ?
-      null : <input type="search" valueLink={this.linkState('filterText')} />;
+    const filterTextInput = R.ifElse(
+      R.isEmpty,
+      () => null,
+      () => <input type="search" valueLink={this.linkState('filterText')} />
+    )(filterableColumns);
 
     return (
       <div>
