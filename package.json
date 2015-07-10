@@ -12,7 +12,7 @@
   "main": "./src",
   "directories": {
     "bin": "./build",
-    "lib": "./src"
+    "lib": "./dist/simple-super-table.js"
   },
   "scripts": {
     "build": "webpack --watch",

@@ -18,17 +18,30 @@ var GLOBALS = {
   '__DEV__': DEBUG
 };
 
+var entries = {
+  'simple-super-table': './src/simple-super-table.jsx'
+};
+
+if (DEBUG) {
+  entries['app'] = './app.js'
+}
+
 var config = {
-  entry: './app.js',
+  entry: entries,
   output: {
-    filename: 'app.js',
-    path: './build/',
-    publicPath: './',
-    sourcePrefix: '  '
+    library: 'SimpleSuperTable',
+    libraryTarget: 'umd',
+    path: './dist',
+    filename: DEBUG ? '[name].js' : '[name].min.js'
   },
 
   externals: {
-    react: 'React'
+    react: {
+      root: 'React',
+      commonjs: 'react',
+      commonjs2: 'react',
+      amd: 'react'
+    }
   },
 
   cache: DEBUG,

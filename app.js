@@ -2,7 +2,6 @@ import './src/style.less';
 
 import React from 'react';
 import R from 'ramda';
-import SimpleSuperTable from './src';
 
 import SampleData from './fixtures/sample-data.json';
 
