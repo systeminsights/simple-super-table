@@ -5,9 +5,9 @@ import R from 'ramda';
 
 describe('basic table rendering', function() {
   const data = [
-    {a: 'abc', b: 'def', c: 'ghi'},
-    {a: 'jkl', b: 'mno', c: 'pqr'},
-    {a: '123', b: '456', c: '789'},
+    {a: 'abc', b: 'def', c: '123'},
+    {a: 'jkl', b: 'mno', c: '456'},
+    {a: 'pqr', b: 'stu', c: '789'},
   ];
   const columns = [
     {a: 'A'},
@@ -23,7 +23,7 @@ describe('basic table rendering', function() {
         data={data}
         columns={columns}
         primaryKeyGen={primaryKeyGen}
-        />
+      />
     );
   });
 
@@ -76,8 +76,11 @@ describe('basic table rendering', function() {
     const tds = TU.scryRenderedDOMComponentsWithTag(trs[0], 'td');
     expect(tds.length).to.equal(3);
     expect(tds[0].getDOMNode().textContent).to.equal(data[0]['a']);
+    expect(tds[0]._reactInternalInstance._currentElement.key).to.equal('a');
     expect(tds[1].getDOMNode().textContent).to.equal(data[0]['b']);
+    expect(tds[1]._reactInternalInstance._currentElement.key).to.equal('b');
     expect(tds[2].getDOMNode().textContent).to.equal(data[0]['c']);
+    expect(tds[2]._reactInternalInstance._currentElement.key).to.equal('c');
   });
 
   it('should render row 2 with column data', function() {
@@ -86,8 +89,11 @@ describe('basic table rendering', function() {
     const tds = TU.scryRenderedDOMComponentsWithTag(trs[1], 'td');
     expect(tds.length).to.equal(3);
     expect(tds[0].getDOMNode().textContent).to.equal(data[1]['a']);
+    expect(tds[0]._reactInternalInstance._currentElement.key).to.equal('a');
     expect(tds[1].getDOMNode().textContent).to.equal(data[1]['b']);
+    expect(tds[1]._reactInternalInstance._currentElement.key).to.equal('b');
     expect(tds[2].getDOMNode().textContent).to.equal(data[1]['c']);
+    expect(tds[2]._reactInternalInstance._currentElement.key).to.equal('c');
   });
 
   it('should render row 3 with column data', function() {
