@@ -6,8 +6,6 @@ import SimpleSuperTable from './src';
 
 import SampleData from './fixtures/sample-data.json';
 
-console.log(SampleData);
-
 const data = SampleData.orders;
 const columns = [
   {orderDate: 'Order Date'},
