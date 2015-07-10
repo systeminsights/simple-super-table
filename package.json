@@ -41,6 +41,7 @@
     "eslint-plugin-react": "^2.2.0",
     "jquery": "^2.1.4",
     "jsdom": "^5.6.0",
+    "json-loader": "^0.5.2",
     "less": "^2.5.0",
     "less-loader": "^2.2.0",
     "minimist": "^1.1.1",

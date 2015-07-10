@@ -4,17 +4,21 @@ import React from 'react';
 import R from 'ramda';
 import SimpleSuperTable from './src';
 
-const data = [
-  {a: 'abc', b: 'def', c: 'ghi'},
-  {a: 'jkl', b: 'mno', c: 'pqr'},
-  {a: '123', b: '456', d: '789'},
-];
+import SampleData from './fixtures/sample-data.json';
+
+console.log(SampleData);
+
+const data = SampleData.orders;
 const columns = [
-  {a: 'A'},
-  {b: 'B'},
-  {c: 'C'},
+  {orderDate: 'Order Date'},
+  {region: 'Region'},
+  {rep: 'Representative'},
+  {item: 'Item'},
+  {units: 'Units'},
+  {unitCost: 'Unit Cost'},
+  {total: 'Total'},
 ];
-const primaryKeyGen = R.prop('a');
+const primaryKeyGen = R.prop('orderDate');
 
 React.render(
   <SimpleSuperTable

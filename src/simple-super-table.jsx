@@ -13,6 +13,12 @@ const dataHelpers = {
 };
 
 const renderHelpers = {
+  // :: {k : v} -> ReactElement
+  renderHeader: function(column) {
+    const colKey = R.head(R.keys(column));
+    return <th key={colKey}>{column[colKey]}</th>;
+  },
+
   // :: String -> String -> ReactElement
   renderCol: R.curry((rowData, colKey) => {
     return <td key={colKey}>{rowData[colKey]}</td>;
@@ -40,7 +46,11 @@ class SimpleSuperTable extends React.Component {
 
     return (
       <table>
-        <thead></thead>
+        <thead>
+          <tr>
+            {R.map(renderHelpers.renderHeader, this.props.columns)}
+          </tr>
+        </thead>
         <tbody>
           {R.map(renderHelpers.renderRow(this.props.primaryKeyGen, colKeys))(this.props.data)}
         </tbody>
