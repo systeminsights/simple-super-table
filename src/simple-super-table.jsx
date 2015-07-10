@@ -43,16 +43,25 @@ const renderHelpers = {
   }),
 
   // :: String -> String -> ReactElement
-  renderCol: R.curry((rowData, colKey) => {
-    return <td key={colKey}>{rowData[colKey]}</td>;
+  renderCol: R.curry((rowData, primaryKey, onColumnClickHandler, colKey) => {
+    return (
+      <td
+        key={colKey}
+        onClick={onColumnClickHandler}
+        data-col-key={colKey}
+        data-primary-key={primaryKey}
+        >{rowData[colKey]}</td>
+    );
   }),
 
   // :: ((Object) -> String) -> [String] -> Object -> ReactElement
-  renderRow: R.curry((primaryKeyGen, colKeys, rowData) => {
+  renderRow: R.curry((primaryKeyGen, colKeys, onRowClickHandler, onColumnClickHandler, rowData) => {
     return (
-      <tr key={primaryKeyGen(rowData)}>
-        {R.map(renderHelpers.renderCol(rowData))(colKeys)}
-      </tr>
+      <tr
+        key={primaryKeyGen(rowData)}
+        data-primary-key={primaryKeyGen(rowData)}
+        onClick={onRowClickHandler}
+      >{R.map(renderHelpers.renderCol(rowData, primaryKeyGen(rowData), onColumnClickHandler))(colKeys)}</tr>
     );
   }),
 };
@@ -69,11 +78,13 @@ const SimpleSuperTable = React.createClass({
     defaultSortColumn: T.string,
     defaultSortAscending: T.bool,
     sortableColumns: T.array,
+    onRowClick: T.func,
+    onColumnClick: T.func,
   },
 
   getDefaultProps: function() {
     return {
-      defaultSortAscending: true
+      defaultSortAscending: true,
     };
   },
 
@@ -98,6 +109,28 @@ const SimpleSuperTable = React.createClass({
     }
   },
 
+  handleRowClick: function(e) {
+    if (!R.isNil(this.props.onRowClick)) {
+      const primaryKey = e.currentTarget.getAttribute('data-primary-key');
+      const foundRow = R.find((d) => R.equals(primaryKey, this.props.primaryKeyGen(d)))(this.props.data);
+      if (!R.isNil(foundRow)) {
+        this.props.onRowClick(foundRow);
+      }
+    }
+  },
+
+  handleColumnClick: function(e) {
+    if (!R.isNil(this.props.onColumnClick)) {
+      e.stopPropagation()
+      const colKey = e.currentTarget.getAttribute('data-col-key');
+      const primaryKey = e.currentTarget.getAttribute('data-primary-key');
+      const foundRow = R.find((d) => R.equals(primaryKey, this.props.primaryKeyGen(d)))(this.props.data);
+      if (!R.isNil(foundRow)) {
+        this.props.onColumnClick(foundRow[colKey], foundRow, colKey);
+      }
+    }
+  },
+
   render: function() {
     const colKeys = dataHelpers.extractColkeys(this.props.columns);
     const filterableColumns = R.isNil(this.props.filterableColumns) ? colKeys : this.props.filterableColumns;
@@ -118,7 +151,7 @@ const SimpleSuperTable = React.createClass({
           </tr>
           </thead>
           <tbody>
-            {R.map(renderHelpers.renderRow(this.props.primaryKeyGen, colKeys))(sortedFilteredData)}
+            {R.map(renderHelpers.renderRow(this.props.primaryKeyGen, colKeys, this.handleRowClick, this.handleColumnClick))(sortedFilteredData)}
           </tbody>
         </table>
       </div>
