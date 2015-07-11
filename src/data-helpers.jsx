@@ -5,7 +5,9 @@ const dataHelpers = {
   // :: Ord[{k : v}] -> Ord[k]
   extractColkeys: R.compose(
     R.flatten,
-    R.map(R.keys)
+    R.map(R.keys),
+    R.flatten,
+    R.map(R.ifElse(R.has('span'), R.prop('columns'), R.identity))
   ),
 
   // :: [String] -> String -> [Object] -> [Object]

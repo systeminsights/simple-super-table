@@ -10,10 +10,20 @@ const columns = [
   {orderDate: 'Order Date'},
   {region: 'Region'},
   {rep: 'Representative'},
-  {item: 'Item'},
-  {units: 'Units'},
-  {unitCost: 'Unit Cost'},
-  {total: 'Total'},
+  {
+    span: 'Sales',
+    columns: [
+      {item: 'Item'},
+      {units: 'Units'},
+    ],
+  },
+  {
+    span: 'Cost',
+    columns: [
+      {unitCost: 'Unit Cost'},
+      {total: 'Total'},
+    ],
+  },
 ];
 const primaryKeyGen = R.prop('orderDate');
 

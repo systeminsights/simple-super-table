@@ -6,6 +6,8 @@ import R from 'ramda';
 import dataHelpers from './data-helpers';
 import renderHelpers from './render-helpers';
 
+import Header from './header.jsx';
+
 // TODO: use ES6 class syntax when an alternative for mixins is available.
 const SimpleSuperTable = React.createClass({
   mixins: [LinkedStateMixin],
@@ -89,11 +91,10 @@ const SimpleSuperTable = React.createClass({
       <div>
         {filterTextInput}
         <table>
-          <thead>
-          <tr>
-            {R.map(renderHelpers.renderHeader(this.handleHeaderClick))(this.props.columns)}
-          </tr>
-          </thead>
+          <Header
+            columns={this.props.columns}
+            onHeaderClick={this.handleHeaderClick}
+          />
           <tbody>
             {R.map(renderHelpers.renderRow(this.props.primaryKeyGen, colKeys, this.handleRowClick, this.handleColumnClick))(sortedFilteredData)}
           </tbody>
