@@ -84,19 +84,40 @@ const SimpleSuperTable = React.createClass({
     const filterTextInput = R.ifElse(
       R.isEmpty,
       () => null,
-      () => <input type="search" valueLink={this.linkState('filterText')} />
+      () => {
+        return (
+          <input
+            type="search"
+            className="filter"
+            valueLink={this.linkState('filterText')}
+          />
+        );
+      }
     )(filterableColumns);
 
+    const sortableColumns = R.defaultTo(dataHelpers.extractColkeys(this.props.columns), this.props.sortableColumns);
+
+    const clickableClassName = R.isNil(this.props.onColumnClick) ?
+      R.isNil(this.props.onRowClick) ? '' : 'row-clickable' : 'col-clickable';
+
     return (
-      <div>
+      <div className={`simple-super-table ${clickableClassName}`}>
         {filterTextInput}
         <table>
           <Header
             columns={this.props.columns}
+            sortableColumns={sortableColumns}
+            sortColKey={this.state.sortColKey}
+            sortAscending={this.state.sortAscending}
             onHeaderClick={this.handleHeaderClick}
           />
           <tbody>
-            {R.map(renderHelpers.renderRow(this.props.primaryKeyGen, colKeys, this.handleRowClick, this.handleColumnClick))(sortedFilteredData)}
+            {R.map(renderHelpers.renderRow(
+              this.props.primaryKeyGen,
+              colKeys,
+              this.handleRowClick,
+              this.handleColumnClick
+            ))(sortedFilteredData)}
           </tbody>
         </table>
       </div>

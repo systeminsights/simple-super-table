@@ -182,6 +182,20 @@ filtering.
 const filterableColumns = ['col1', 'col2'];
 ```
 
+## Exposed CSS classes
+
+| Class Combination    | Element(s)                                                                                 |
+|----------------------|--------------------------------------------------------------------------------------------|
+| .simple-super-table  | Main container                                                                             |
+| .title               | Title                                                                                      |
+| .filter              | Filter input box                                                                           |
+| .col.{colKey}        | Each column in header and body                                                             |
+| .row                 | Each row in body                                                                           |
+| .row-clickable       | Main container, when onRowClick handler is defined and onColumnClick is not defined.       |
+| .col-clickable       | Main container, when onColumnClick is defined                                              |
+| .sortable            | Columns in header which are sortable                                                       |
+| .sorted.{asc|desc|}  | The header column by which the data has been sorted                                        |
+
 ## Basic table
 
 ```js

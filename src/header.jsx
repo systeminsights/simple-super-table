@@ -28,6 +28,9 @@ const extractSpannedColumns = function(columnsWithSpans) {
 const Header = React.createClass({
   propTypes: {
     columns: T.array.isRequired,
+    sortableColumns: T.array.isRequired,
+    sortColKey: T.string.isRequired,
+    sortAscending: T.bool.isRequired,
     onHeaderClick: T.func.isRequired,
   },
 
@@ -83,7 +86,12 @@ const Header = React.createClass({
       <thead>
         {rowForSpannedColumns}
         <tr>
-          {R.map(renderHelpers.renderHeader(this.props.onHeaderClick))(columns)}
+          {R.map(renderHelpers.renderHeader(
+            this.props.onHeaderClick,
+            this.props.sortableColumns,
+            this.props.sortColKey,
+            this.props.sortAscending
+          ))(columns)}
         </tr>
       </thead>
     );
