@@ -17,12 +17,12 @@ const renderHelpers = {
     );
   }),
 
-  // :: Object -> String -> fn -> String -> ReactElement
-  renderCol: R.curry((rowData, primaryKey, onColumnClickHandler, colKey) => {
+  // :: Object -> String -> fn -> String -> fn -> ReactElement
+  renderCol: R.curry((rowData, primaryKey, onColumnClickHandler, columnClassGetter, colKey) => {
     return (
       <td
         key={colKey}
-        className={`col ${colKey}`}
+        className={`col ${colKey} ${columnClassGetter(rowData[colKey], rowData, colKey)}`}
         onClick={onColumnClickHandler}
         data-col-key={colKey}
         data-primary-key={primaryKey}
@@ -30,15 +30,20 @@ const renderHelpers = {
     );
   }),
 
-  // :: ((Object) -> String) -> [String] -> fn -> fn -> Object -> ReactElement
-  renderRow: R.curry((primaryKeyGen, colKeys, onRowClickHandler, onColumnClickHandler, rowData) => {
+  // :: ((Object) -> String) -> [String] -> fn -> fn -> fn -> fn -> Object -> ReactElement
+  renderRow: R.curry((primaryKeyGen, colKeys, onRowClickHandler, onColumnClickHandler, rowClassGetter, columnClassGetter, rowData) => {
     return (
       <tr
         key={primaryKeyGen(rowData)}
-        className="row"
+        className={`row ${rowClassGetter(rowData)}`}
         data-primary-key={primaryKeyGen(rowData)}
         onClick={onRowClickHandler}
-        >{R.map(renderHelpers.renderCol(rowData, primaryKeyGen(rowData), onColumnClickHandler))(colKeys)}</tr>
+      >{R.map(renderHelpers.renderCol(
+        rowData,
+        primaryKeyGen(rowData),
+        onColumnClickHandler,
+        columnClassGetter
+      ))(colKeys)}</tr>
     );
   }),
 };

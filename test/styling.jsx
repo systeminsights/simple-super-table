@@ -178,4 +178,67 @@ describe('styling', function() {
       expect(renderTree.getDOMNode().className).not.to.contain('row-clickable');
     });
   });
+
+  describe('rowClassGetter', function() {
+    const rowClassGetter = sinon.spy(R.always('my-row'));
+
+    beforeEach(function() {
+      renderTree = TU.renderIntoDocument(
+        <SimpleSuperTable
+          data={data}
+          columns={columns}
+          primaryKeyGen={primaryKeyGen}
+          rowClassGetter={rowClassGetter}
+        />
+      );
+    });
+
+    afterEach(function() {
+      React.unmountComponentAtNode(document.body);
+      rowClassGetter.reset();
+    });
+
+    it('should add the result of invocation to row class', function() {
+      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
+      const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
+      expect(rowClassGetter).to.have.been.calledWith(data[0]);
+      expect(rowClassGetter).to.have.been.calledWith(data[1]);
+      expect(rowClassGetter).to.have.been.calledWith(data[2]);
+      expect(trs[0].getDOMNode().className).to.contain('my-row');
+      expect(trs[1].getDOMNode().className).to.contain('my-row');
+      expect(trs[2].getDOMNode().className).to.contain('my-row');
+    });
+  });
+
+  describe('columnClassGetter', function() {
+    const columnClassGetter = sinon.spy(R.always('my-col'));
+
+    beforeEach(function() {
+      renderTree = TU.renderIntoDocument(
+        <SimpleSuperTable
+          data={data.slice(0, 1)}
+          columns={columns}
+          primaryKeyGen={primaryKeyGen}
+          columnClassGetter={columnClassGetter}
+        />
+      );
+    });
+
+    afterEach(function() {
+      React.unmountComponentAtNode(document.body);
+      columnClassGetter.reset();
+    });
+
+    it('should add the result of invocation to column class', function() {
+      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
+      const tr = TU.findRenderedDOMComponentWithTag(tbody, 'tr');
+      const tds = TU.scryRenderedDOMComponentsWithTag(tr, 'td');
+      expect(columnClassGetter).to.have.been.calledWith(data[0]['a'], data[0], 'a');
+      expect(columnClassGetter).to.have.been.calledWith(data[0]['b'], data[0], 'b');
+      expect(columnClassGetter).to.have.been.calledWith(data[0]['c'], data[0], 'c');
+      expect(tds[0].getDOMNode().className).to.contain('my-col');
+      expect(tds[1].getDOMNode().className).to.contain('my-col');
+      expect(tds[2].getDOMNode().className).to.contain('my-col');
+    });
+  });
 });

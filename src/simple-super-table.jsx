@@ -22,11 +22,15 @@ const SimpleSuperTable = React.createClass({
     sortableColumns: T.array,
     onRowClick: T.func,
     onColumnClick: T.func,
+    rowClassGetter: T.func,
+    columnClassGetter: T.func,
   },
 
   getDefaultProps: function() {
     return {
       defaultSortAscending: true,
+      rowClassGetter: R.always(''),
+      columnClassGetter: R.always(''),
     };
   },
 
@@ -116,7 +120,9 @@ const SimpleSuperTable = React.createClass({
               this.props.primaryKeyGen,
               colKeys,
               this.handleRowClick,
-              this.handleColumnClick
+              this.handleColumnClick,
+              this.props.rowClassGetter,
+              this.props.columnClassGetter
             ))(sortedFilteredData)}
           </tbody>
         </table>
