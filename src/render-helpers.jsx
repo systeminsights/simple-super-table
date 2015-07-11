@@ -2,7 +2,7 @@ import React from 'react';
 import R from 'ramda';
 
 const renderHelpers = {
-  // :: {k : v} -> ReactElement
+  // :: fn -> [String] -> String -> Bool -> {k : v} -> ReactElement
   renderHeader: R.curry((onClickHandler, sortableColKeys, sortColKey, sortAscending, column) => {
     const colKey = R.head(R.keys(column));
     const sortable = R.contains(colKey, sortableColKeys) ? 'sortable' : '';
@@ -17,7 +17,7 @@ const renderHelpers = {
     );
   }),
 
-  // :: String -> String -> ReactElement
+  // :: Object -> String -> fn -> String -> ReactElement
   renderCol: R.curry((rowData, primaryKey, onColumnClickHandler, colKey) => {
     return (
       <td
@@ -30,7 +30,7 @@ const renderHelpers = {
     );
   }),
 
-  // :: ((Object) -> String) -> [String] -> Object -> ReactElement
+  // :: ((Object) -> String) -> [String] -> fn -> fn -> Object -> ReactElement
   renderRow: R.curry((primaryKeyGen, colKeys, onRowClickHandler, onColumnClickHandler, rowData) => {
     return (
       <tr
