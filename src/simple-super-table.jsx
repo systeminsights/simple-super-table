@@ -25,6 +25,7 @@ const SimpleSuperTable = React.createClass({
     rowClassGetter: T.func,
     columnClassGetter: T.func,
     columnRenderers: T.object,
+    title: T.string,
   },
 
   getDefaultProps: function() {
@@ -33,6 +34,7 @@ const SimpleSuperTable = React.createClass({
       rowClassGetter: R.always(''),
       columnClassGetter: R.always(''),
       columnRenderers: {},
+      title: '',
     };
   },
 
@@ -93,9 +95,10 @@ const SimpleSuperTable = React.createClass({
       () => {
         return (
           <input
-            type="search"
+            type="text"
             className="filter"
             valueLink={this.linkState('filterText')}
+            placeholder={'Filter'}
           />
         );
       }
@@ -108,7 +111,10 @@ const SimpleSuperTable = React.createClass({
 
     return (
       <div className={`simple-super-table ${clickableClassName}`}>
-        {filterTextInput}
+        <div className="top-bar">
+          <div className="title-container"><span className="title">{this.props.title}</span></div>
+          <div className="filter-container">{filterTextInput}</div>
+        </div>
         <table>
           <Header
             columns={this.props.columns}

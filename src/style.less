@@ -1,19 +1,51 @@
-table {
-  border-collapse: collapse;
+div.simple-super-table {
+  display: flex;
+  flex-direction: column;
 
-  thead {
-    background: #cccccc;
+  div.top-bar {
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    height: 35px;
 
-    th {
-      padding: 0.5em;
-      border: 1px solid #aaaaaa;
+    div.title-container {
+      margin: auto;
+      flex: 0.5;
+    }
+
+    div.filter-container {
+      display: flex;
+      flex: 0.5;
+      margin: auto;
+
+      input {
+        flex: 1;
+        border-radius: 0;
+        padding: 0.5em;
+      }
     }
   }
 
-  tbody {
-    td {
-      padding: 0.5em;
-      border: 1px solid #cccccc;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      background: #cccccc;
+
+      th {
+        padding: 0.5em;
+        border: 1px solid #aaaaaa;
+      }
+    }
+
+    tbody {
+      td {
+        padding: 0.5em;
+        border: 1px solid #cccccc;
+      }
     }
   }
 }
+
+

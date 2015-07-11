@@ -15,6 +15,7 @@ describe('basic table rendering', function() {
     {c: 'C'},
   ];
   const primaryKeyGen = R.prop('a');
+  const title = 'Test Table';
   let renderTree = null;
 
   beforeEach(function() {
@@ -23,12 +24,18 @@ describe('basic table rendering', function() {
         data={data}
         columns={columns}
         primaryKeyGen={primaryKeyGen}
+        title={title}
       />
     );
   });
 
   afterEach(function() {
     React.unmountComponentAtNode(document.body);
+  });
+
+  it('should render a title div', function() {
+    const titleDiv = TU.findRenderedDOMComponentWithClass(renderTree, 'title-container');
+    expect(titleDiv.getDOMNode().textContent).to.equal(title);
   });
 
   it('should render a table element with thead and tbody', function() {

@@ -20,12 +20,15 @@ describe('styling', function() {
   let renderTree = null;
 
   describe('base classes', function() {
+    const title = 'Test Title';
+
     beforeEach(function() {
       renderTree = TU.renderIntoDocument(
         <SimpleSuperTable
           data={data}
           columns={columns}
           primaryKeyGen={primaryKeyGen}
+          title={title}
         />
       );
     });
@@ -36,6 +39,12 @@ describe('styling', function() {
 
     it('should assign class to the main container', function() {
       expect(renderTree.getDOMNode().className).to.contain('simple-super-table');
+    });
+
+    it('should assign title class to title', function() {
+      const titleDiv = TU.findRenderedDOMComponentWithClass(renderTree, 'title-container');
+      const titleSpan = TU.findRenderedDOMComponentWithTag(titleDiv, 'span');
+      expect(titleSpan.getDOMNode().className).to.contain('title');
     });
 
     it('should assign class to filter input', function() {
