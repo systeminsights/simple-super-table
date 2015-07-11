@@ -17,8 +17,8 @@ const renderHelpers = {
     );
   }),
 
-  // :: Object -> String -> fn -> String -> fn -> ReactElement
-  renderCol: R.curry((rowData, primaryKey, onColumnClickHandler, columnClassGetter, colKey) => {
+  // :: Object -> String -> fn -> String -> fn -> {k: fn} -> filterText -> ReactElement
+  renderCol: R.curry((rowData, primaryKey, onColumnClickHandler, columnClassGetter, columnRenderers, filterText, colKey) => {
     return (
       <td
         key={colKey}
@@ -26,12 +26,12 @@ const renderHelpers = {
         onClick={onColumnClickHandler}
         data-col-key={colKey}
         data-primary-key={primaryKey}
-        >{rowData[colKey]}</td>
+        >{R.has(colKey, columnRenderers) ? columnRenderers[colKey](rowData[colKey], rowData, colKey, filterText) : rowData[colKey]}</td>
     );
   }),
 
-  // :: ((Object) -> String) -> [String] -> fn -> fn -> fn -> fn -> Object -> ReactElement
-  renderRow: R.curry((primaryKeyGen, colKeys, onRowClickHandler, onColumnClickHandler, rowClassGetter, columnClassGetter, rowData) => {
+  // :: ((Object) -> String) -> [String] -> fn -> fn -> fn -> fn -> {k: fn} -> Object -> String -> ReactElement
+  renderRow: R.curry((primaryKeyGen, colKeys, onRowClickHandler, onColumnClickHandler, rowClassGetter, columnClassGetter, columnRenderers, filterText, rowData) => {
     return (
       <tr
         key={primaryKeyGen(rowData)}
@@ -42,7 +42,9 @@ const renderHelpers = {
         rowData,
         primaryKeyGen(rowData),
         onColumnClickHandler,
-        columnClassGetter
+        columnClassGetter,
+        columnRenderers,
+        filterText
       ))(colKeys)}</tr>
     );
   }),
