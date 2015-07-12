@@ -5,6 +5,7 @@ import R from 'ramda';
 
 import dataHelpers from './data-helpers';
 import renderHelpers from './render-helpers';
+import {filterTextHighlightRenderer} from './column-renderers';
 
 import Header from './header.jsx';
 
@@ -109,6 +110,12 @@ const SimpleSuperTable = React.createClass({
     const clickableClassName = R.isNil(this.props.onColumnClick) ?
       R.isNil(this.props.onRowClick) ? '' : 'row-clickable' : 'col-clickable';
 
+    const columnRenderers = R.compose(
+      R.merge(R.__, this.props.columnRenderers),
+      R.fromPairs,
+      R.map((k) => [k, filterTextHighlightRenderer])
+    )(filterableColumns);
+
     return (
       <div className={`simple-super-table ${clickableClassName}`}>
         <div className="top-bar">
@@ -131,7 +138,7 @@ const SimpleSuperTable = React.createClass({
               this.handleColumnClick,
               this.props.rowClassGetter,
               this.props.columnClassGetter,
-              this.props.columnRenderers,
+              columnRenderers,
               this.state.filterText
             ))(sortedFilteredData)}
           </tbody>

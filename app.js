@@ -28,10 +28,11 @@ const columns = [
 const primaryKeyGen = R.prop('orderDate');
 
 React.render(
-  <SimpleSuperTable
+  <SimpleSuperTable.default
     data={data}
     columns={columns}
     primaryKeyGen={primaryKeyGen}
+    filterableColumns={['rep', 'item']}
   />,
   document.getElementById('component')
 );

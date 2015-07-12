@@ -1,7 +1,7 @@
 import React from 'react/addons';
 const TU = React.addons.TestUtils;
-import SimpleSuperTable from '../src/';
 import R from 'ramda';
+import SimpleSuperTable from '../src';
 
 describe('basic table rendering', function() {
   const data = [

@@ -19,7 +19,7 @@ var GLOBALS = {
 };
 
 var entries = {
-  'simple-super-table': './src/simple-super-table.jsx'
+  'simple-super-table': './src'
 };
 
 if (DEBUG) {

@@ -1,66 +1,46 @@
 import React from 'react/addons';
 const TU = React.addons.TestUtils;
-import SimpleSuperTable from '../src/';
 import R from 'ramda';
+import {columnRenderers} from '../src';
 
 describe('column renderers', function() {
-  const data = [
-    {a: 'abc', b: 'def', c: '123'},
-  ];
-  const columns = [
-    {a: 'A'},
-    {b: 'B'},
-    {c: 'C'},
-  ];
-  const primaryKeyGen = R.prop('a');
-  const columnRenderers = {
-    b: function() {
-      return <h1>Custom Stuff</h1>;
-    },
-  };
-  let renderTree = null;
+  describe('filterTextHighlightRenderer', function() {
+    const rowData = {a: 'abcabc', b: 'def', c: 123};
 
-  before(function() {
-    sinon.spy(columnRenderers, 'b');
-  });
+    it('should not highlight when filter text is empty', function() {
+      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['a'], rowData, 'a', ''));
+      const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
+      expect(spans.length).to.equal(1);
+      expect(spans[0].getDOMNode().textContent).to.equal(rowData['a']);
+      expect(spans[0].getDOMNode().className).to.include('filter-text-highlight');
+    });
 
-  beforeEach(function () {
-    renderTree = TU.renderIntoDocument(
-      <SimpleSuperTable
-        data={data}
-        columns={columns}
-        primaryKeyGen={primaryKeyGen}
-        columnRenderers={columnRenderers}
-      />
-    );
-  });
+    it('should create a highlight span for each match', function() {
+      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['a'], rowData, 'a', 'a'));
+      const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
+      expect(spans.length).to.equal(5);
+      expect(spans[0].getDOMNode().textContent).to.equal(rowData['a']);
+      expect(spans[0].getDOMNode().className).to.include('filter-text-highlight');
+      expect(spans[1].getDOMNode().textContent).to.equal('a');
+      expect(spans[1].getDOMNode().className).to.include('highlight');
+      expect(spans[2].getDOMNode().textContent).to.equal('bc');
+      expect(spans[2].getDOMNode().className).not.to.include('highlight');
+      expect(spans[3].getDOMNode().textContent).to.equal('a');
+      expect(spans[3].getDOMNode().className).to.include('highlight');
+      expect(spans[4].getDOMNode().textContent).to.equal('bc');
+      expect(spans[4].getDOMNode().className).not.to.include('highlight');
+    });
 
-  afterEach(function () {
-    React.unmountComponentAtNode(document.body);
-    columnRenderers.b.reset();
-  });
-
-  it('should render column a and b the normal way', function() {
-    const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
-    const tr = TU.findRenderedDOMComponentWithTag(tbody, 'tr');
-    const tds = TU.scryRenderedDOMComponentsWithTag(tbody, 'td');
-    expect(tds[0].getDOMNode().textContent).to.equal(data[0]['a']);
-    expect(tds[2].getDOMNode().textContent).to.equal(data[0]['c']);
-  });
-
-  it('should render the result of columnRenderer for column b', function () {
-    expect(columnRenderers.b.lastCall.args).to.eql([data[0]['b'], data[0], 'b', '']);
-    const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
-    const tr = TU.findRenderedDOMComponentWithTag(tbody, 'tr');
-    const tds = TU.scryRenderedDOMComponentsWithTag(tr, 'td');
-    const h1 = TU.findRenderedDOMComponentWithTag(tds[1], 'h1');
-    expect(h1).to.be.defined;
-    expect(h1.getDOMNode().textContent).to.equal('Custom Stuff');
-  });
-
-  it('should pass the text filter to column renderer', function() {
-    const input = TU.findRenderedDOMComponentWithTag(renderTree, 'input');
-    TU.Simulate.change(input, {target: {value: 'abc'}});
-    expect(columnRenderers.b.lastCall.args).to.eql([data[0]['b'], data[0], 'b', 'abc']);
+    it('should treat numerical match as string match', function() {
+      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['c'], rowData, 'c', 3));
+      const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
+      expect(spans.length).to.equal(3);
+      expect(spans[0].getDOMNode().textContent).to.equal(rowData['c'].toString());
+      expect(spans[0].getDOMNode().className).to.include('filter-text-highlight');
+      expect(spans[1].getDOMNode().textContent).to.equal('12');
+      expect(spans[1].getDOMNode().className).not.to.include('highlight');
+      expect(spans[2].getDOMNode().textContent).to.equal('3');
+      expect(spans[2].getDOMNode().className).to.include('highlight');
+    });
   });
 });
