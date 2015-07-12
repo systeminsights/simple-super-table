@@ -1,19 +1,28 @@
 import React from 'react';
 import R from 'ramda';
 
+import SortIcon from './svg/sort-icon';
+
 const renderHelpers = {
   // :: fn -> [String] -> String -> Bool -> {k : v} -> ReactElement
   renderHeader: R.curry((onClickHandler, sortableColKeys, sortColKey, sortAscending, column) => {
     const colKey = R.head(R.keys(column));
     const sortable = R.contains(colKey, sortableColKeys) ? 'sortable' : '';
     const sorted = colKey === sortColKey ? `sorted ${sortAscending ? 'asc' : 'desc'}` : '';
+    const sortIcon = sortable ? <SortIcon size={12.5} sorted={colKey === sortColKey} ascending={sortAscending} /> : null;
+
     return (
       <th
         key={colKey}
         className={`col ${colKey} ${sortable} ${sorted}`}
         onClick={onClickHandler}
         data-col-key={colKey}
-        >{column[colKey]}</th>
+      >
+        <div className="content">
+          <div className="header">{column[colKey]}</div>
+          <div className="sort-icon-container">{sortIcon}</div>
+        </div>
+      </th>
     );
   }),
 

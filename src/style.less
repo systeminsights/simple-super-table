@@ -1,54 +1,135 @@
+@headerBgColor: #f9fafb;
+@textHighlightColor: #f8f800;
+@borderColor: rgba(34,36,38,.1);
+@inputFocusBorderColor: #aaaaaa;
+
 div.simple-super-table {
   display: flex;
+  flex: 1;
   flex-direction: column;
 
   div.top-bar {
     display: flex;
     flex-direction: row;
     flex-shrink: 0;
-    height: 35px;
+    background: @headerBgColor;
+    border: 1px solid @borderColor;
 
     div.title-container {
       margin: auto;
-      flex: 0.5;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+      font-weight: bold;
+      flex: 0.7;
+      white-space: pre-wrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     div.filter-container {
       display: flex;
+      flex-direction: row;
       flex: 0.5;
       margin: auto;
+      border-right: 1px solid @borderColor;
+
+      div.icon {
+        display: flex;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        background: darken(@headerBgColor, 10%);
+
+        * {
+          margin: auto;
+        }
+      }
 
       input {
-        flex: 1;
+        flex: 0.3;
         border-radius: 0;
         padding: 0.5em;
+        margin: auto;
+        font-size: 0.9em;
+        border: 1px solid @borderColor;
+
+        &:focus {
+          border: 1px solid @inputFocusBorderColor;
+          outline: none;
+        }
+      }
+    }
+
+    div.csv-container {
+      display: flex;
+      flex-shrink: 0;
+      margin-left: 0.5em;
+
+      div.original-csv,
+      div.csv-filter {
+        margin: auto 0.25em;
+        cursor: pointer;
+        width: 27.5px;
+        height: 27.5px;
+        fill: #232323;
+
+        &.disabled {
+          opacity: 0.25;
+        }
       }
     }
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  div.table-container {
+    flex: 1;
+    overflow: auto;
 
-    thead {
-      background: #cccccc;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-right: 1px solid @borderColor;
+      border-bottom: 1px solid @borderColor;
 
-      th {
-        padding: 0.5em;
-        border: 1px solid #aaaaaa;
+      thead {
+        background: @headerBgColor;
+        user-select: none;
+        cursor: default;
+
+        th {
+          border-top: 1px solid @borderColor;
+          border-left: 1px solid @borderColor;
+          padding: 0.5em;
+
+          .content {
+            display: flex;
+            flex-direction: row;
+
+            .header {
+              flex: 1;
+            }
+
+            .sort-icon-container {
+              flex-shrink: 0;
+              margin: auto;
+            }
+          }
+        }
       }
-    }
 
-    tbody {
-      td {
-        padding: 0.5em;
-        border: 1px solid #cccccc;
-      }
+      tbody {
+        td {
+          padding: 0.5em;
+          border-top: 1px solid @borderColor;
+          border-left: 1px solid @borderColor;
+        }
 
-      td.col {
-        .filter-text-highlight {
-          .highlight {
-            background-color: #ffff00;
+        td.col {
+          .filter-text-highlight {
+            .highlight {
+              box-sizing: border-box;
+              background-color: @textHighlightColor;
+              border-radius: 3px;
+              border: 1px solid @borderColor;
+            }
           }
         }
       }

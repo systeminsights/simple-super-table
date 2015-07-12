@@ -32,7 +32,8 @@ React.render(
     data={data}
     columns={columns}
     primaryKeyGen={primaryKeyGen}
-    filterableColumns={['rep', 'item']}
+    title={'Sales in 2015'}
+    sortableColumns={['rep', 'item', 'units', 'unitCost', 'total']}
   />,
   document.getElementById('component')
 );

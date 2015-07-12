@@ -3,6 +3,10 @@ const T = React.PropTypes;
 const {LinkedStateMixin} = React.addons;
 import R from 'ramda';
 
+import CsvIcon from './svg/csv-icon';
+import FilterIcon from './svg/filter-icon';
+import CsvFilterIcon from './svg/csv-filter-icon.jsx';
+
 import dataHelpers from './data-helpers';
 import renderHelpers from './render-helpers';
 import {filterTextHighlightRenderer} from './column-renderers';
@@ -81,6 +85,31 @@ const SimpleSuperTable = React.createClass({
     }
   },
 
+  handleFilteredCSVClick: function(e) {
+    const colKeys = dataHelpers.extractColkeys(this.props.columns);
+    const filterableColumns = R.defaultTo(colKeys, this.props.filterableColumns);
+    const filteredData = R.ifElse(
+      R.isEmpty,
+      () => this.props.data,
+      () => dataHelpers.filterData(filterableColumns, this.state.filterText, this.props.data)
+    )(filterableColumns);
+    const sortedFilteredData = dataHelpers.sortData(this.state.sortColKey, this.state.sortAscending, filteredData);
+    const projectedData = R.project(colKeys, sortedFilteredData);
+    dataHelpers.pushDataForDownload(
+      R.isEmpty(this.props.title) ? 'file' : this.props.title,
+      projectedData
+    );
+  },
+
+  handleOriginalCSVClick: function(e) {
+    const colKeys = dataHelpers.extractColkeys(this.props.columns);
+    const projectedData = R.project(colKeys, this.props.data);
+    dataHelpers.pushDataForDownload(
+      R.isEmpty(this.props.title) ? 'file' : this.props.title,
+      projectedData
+    );
+  },
+
   render: function() {
     const colKeys = dataHelpers.extractColkeys(this.props.columns);
     const filterableColumns = R.defaultTo(colKeys, this.props.filterableColumns);
@@ -116,33 +145,54 @@ const SimpleSuperTable = React.createClass({
       R.map((k) => [k, filterTextHighlightRenderer])
     )(filterableColumns);
 
+    const titleContainer = R.ifElse(
+      R.isEmpty,
+      () => null,
+      () => <div className="title-container"><span className="title">{this.props.title}</span></div>
+    )(this.props.title);
+
     return (
       <div className={`simple-super-table ${clickableClassName}`}>
         <div className="top-bar">
-          <div className="title-container"><span className="title">{this.props.title}</span></div>
-          <div className="filter-container">{filterTextInput}</div>
+          {titleContainer}
+          <div className="filter-container">
+            <div className="icon"><FilterIcon size={15} /></div>
+            {filterTextInput}
+          </div>
+          <div className="csv-container">
+            <div
+              className={`csv-filter ${R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? 'disabled' : ''}`}
+              onClick={R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? null : this.handleFilteredCSVClick}
+            ><CsvFilterIcon size={27.5} /></div>
+            <div
+              className={`original-csv ${R.isEmpty(this.props.data) ? 'disabled' : ''}`}
+              onClick={R.isEmpty(this.props.data) ? null : this.handleOriginalCSVClick}
+            ><CsvIcon size={27.5} /></div>
+          </div>
         </div>
-        <table>
-          <Header
-            columns={this.props.columns}
-            sortableColumns={sortableColumns}
-            sortColKey={this.state.sortColKey}
-            sortAscending={this.state.sortAscending}
-            onHeaderClick={this.handleHeaderClick}
-          />
-          <tbody>
-            {R.map(renderHelpers.renderRow(
-              this.props.primaryKeyGen,
-              colKeys,
-              this.handleRowClick,
-              this.handleColumnClick,
-              this.props.rowClassGetter,
-              this.props.columnClassGetter,
-              columnRenderers,
-              this.state.filterText
-            ))(sortedFilteredData)}
-          </tbody>
-        </table>
+        <div className="table-container">
+          <table>
+            <Header
+              columns={this.props.columns}
+              sortableColumns={sortableColumns}
+              sortColKey={this.state.sortColKey}
+              sortAscending={this.state.sortAscending}
+              onHeaderClick={this.handleHeaderClick}
+            />
+            <tbody>
+              {R.map(renderHelpers.renderRow(
+                this.props.primaryKeyGen,
+                colKeys,
+                this.handleRowClick,
+                this.handleColumnClick,
+                this.props.rowClassGetter,
+                this.props.columnClassGetter,
+                columnRenderers,
+                this.state.filterText
+              ))(sortedFilteredData)}
+            </tbody>
+          </table>
+        </div>
       </div>
     );
   },
