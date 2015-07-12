@@ -5,13 +5,14 @@ import R from 'ramda';
 
 import CsvIcon from './svg/csv-icon';
 import FilterIcon from './svg/filter-icon';
-import CsvFilterIcon from './svg/csv-filter-icon.jsx';
+import CsvFilterIcon from './svg/csv-filter-icon';
 
 import dataHelpers from './data-helpers';
 import renderHelpers from './render-helpers';
 import {filterTextHighlightRenderer} from './column-renderers';
 
-import Header from './header.jsx';
+import Header from './header';
+import Body from './body';
 
 // TODO: use ES6 class syntax when an alternative for mixins is available.
 const SimpleSuperTable = React.createClass({
@@ -179,18 +180,17 @@ const SimpleSuperTable = React.createClass({
               sortAscending={this.state.sortAscending}
               onHeaderClick={this.handleHeaderClick}
             />
-            <tbody>
-              {R.map(renderHelpers.renderRow(
-                this.props.primaryKeyGen,
-                colKeys,
-                this.handleRowClick,
-                this.handleColumnClick,
-                this.props.rowClassGetter,
-                this.props.columnClassGetter,
-                columnRenderers,
-                this.state.filterText
-              ))(sortedFilteredData)}
-            </tbody>
+            <Body
+              data={sortedFilteredData}
+              colKeys={colKeys}
+              primaryKeyGen={this.props.primaryKeyGen}
+              filterText={this.state.filterText}
+              onRowClick={this.handleRowClick}
+              onColumnClick={this.handleColumnClick}
+              columnRenderers={columnRenderers}
+              rowClassGetter={this.props.rowClassGetter}
+              columnClassGetter={this.props.columnClassGetter}
+            />
           </table>
         </div>
       </div>
