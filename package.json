@@ -1,19 +1,15 @@
 {
-  "name": "react-component-starter",
-  "version": "0.0.0",
+  "name": "simple-super-table",
+  "version": "2.0.0",
   "description": "React component for rendering low volume data tables (~500). Provides search, sort and csv export for free.",
   "keywords": [
     "react",
     "react-component"
   ],
-  "repository": "https://github.com/kriasoft/react-component-starter",
+  "repository": "https://github.com/santhosbaala/simple-super-table",
   "license": "MIT",
   "author": "System Insights Inc.",
-  "main": "./src",
-  "directories": {
-    "bin": "./build",
-    "lib": "./dist/simple-super-table.js"
-  },
+  "main": "./dist/simple-super-table.min.js",
   "scripts": {
     "build": "webpack --watch",
     "build-dist": "NODE_ENV=development npm test && NODE_ENV=production webpack --release",

@@ -1,5 +1,5 @@
 {
-  "name": "Simple Super Table",
+  "name": "simple-super-table",
   "version": "0.0.0",
   "private": true,
   "main": "./index.js"
