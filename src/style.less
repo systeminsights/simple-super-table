@@ -118,6 +118,11 @@ div.simple-super-table {
       }
 
       tbody {
+        tr.row.active {
+          background-color: #e0e0e0;
+          box-shadow: 0 0 0 rgba(0,0,0,.87) inset;
+        }
+
         td {
           padding: 0.5em;
           border-top: 1px solid @borderColor;
@@ -149,6 +154,24 @@ div.simple-super-table {
       }
     }
   }
+
+  &.row-clickable {
+    table {
+      tbody {
+        tr.row:hover {
+          background-color: rgba(0, 0, 0, .05);
+        }
+      }
+    }
+  }
+
+  &.col-clickable {
+    table {
+      tbody {
+        td.col:hover {
+          background-color: rgba(0, 0, 0, .05);
+        }
+      }
+    }
+  }
 }
-
-

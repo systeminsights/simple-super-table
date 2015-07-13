@@ -28,7 +28,7 @@ const columns = [
 ];
 const primaryKeyGen = R.prop('orderDate');
 const columnRenderers = {
-  total: SimpleSuperTable.columnRenderers.barRenderer(0, 2000, 200, 20, R.always('#0000cc')),
+  total: SimpleSuperTable.columnRenderers.barRenderer(0, 2000, 200, 20, R.always('#0000cc'), (_) => _),
 };
 
 React.render(
