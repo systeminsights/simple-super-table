@@ -56,7 +56,7 @@ describe('column renderers', function() {
     });
 
     it('should return an svg element', function() {
-      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'));
+      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), R.identity);
       const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
       const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
       expect(svg).to.be.defined;
@@ -65,7 +65,7 @@ describe('column renderers', function() {
     });
 
     it('should render a bar inside the svg element', function() {
-      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'));
+      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), R.identity);
       const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
       const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
       const rect = TU.findRenderedDOMComponentWithTag(renderTree, 'rect');
@@ -76,12 +76,21 @@ describe('column renderers', function() {
     });
 
     it('should render a text element inside the svg element', function() {
-      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'));
+      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), R.identity);
       const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
       const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
       const text = TU.findRenderedDOMComponentWithTag(renderTree, 'text');
       expect(text).to.be.defined;
       expect(text.getDOMNode().textContent).to.equal('50');
+    });
+
+    it('should render a text element inside the svg element using formatter', function() {
+      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), (colData) => 'xyz');
+      const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
+      const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
+      const text = TU.findRenderedDOMComponentWithTag(renderTree, 'text');
+      expect(text).to.be.defined;
+      expect(text.getDOMNode().textContent).to.equal('xyz');
     });
   });
 });

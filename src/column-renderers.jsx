@@ -39,8 +39,8 @@ export function filterTextHighlightRenderer(colData, _, __, filterText) {
 
 // renderer for drawing horizontal bars.
 // exposes .bar CSS class
-// :: Number -> Number -> Number -> ((String|Number, Object) -> String) -> (String|Number) -> ReactElement
-export function barRenderer(minValue, maxValue, width, height, colorChooser) {
+// :: Number -> Number -> Number -> ((String|Number, Object) -> String) -> (String|Number) -> (a -> String) -> ReactElement
+export function barRenderer(minValue, maxValue, width, height, colorMapper, dataFormatter) {
   const scale = d3Scale.linear().domain([minValue, maxValue]).range([0, width]);
 
   return (colData, rowData) => {
@@ -54,10 +54,10 @@ export function barRenderer(minValue, maxValue, width, height, colorChooser) {
             y={0}
             width={scale(colData)}
             height={height}
-            fill={colorChooser(colData, rowData)}
+            fill={colorMapper(colData, rowData)}
             opacity={0.25}
           />
-          <text x={5} y={height * 0.75} fill="#232323">{colData}</text>
+          <text x={5} y={height * 0.75} fill="#232323">{dataFormatter(colData, rowData)}</text>
         </svg>
       </div>
     );
