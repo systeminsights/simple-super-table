@@ -210,6 +210,21 @@ const messages = {
 | .filter-text-highlight | Child element of a column rendered by filter text highlight column renderer                |
 | .highlight             | Text spans to be highlighted inside .filter-text-highlight                                 |
 
+## Bundled column renderers
+
+The project bundles commonly used column renderers. You can compose them inside other renderers or use them as is.
+
+### barRenderer
+
+Renders a horizontal bar. To create a new renderer, pass minValue, maxValue, width, height and a color mapper functon.
+The color mapper function will be invoked with the column data and row data. If the bar needs to be filled with the same
+color, pass a constant value function.
+
+```js
+const myBarRenderer = SimpleSuperTable.columnRenderers.barRenderer(0, 250, 100, 20, () => '#ffff00');
+// will return a bar which expects values in the range [0, 250], 100px wide, 20px tall and filled with '#ffff00' color.
+```
+
 ## Basic table
 
 ```js

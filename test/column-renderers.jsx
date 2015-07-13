@@ -7,6 +7,10 @@ describe('column renderers', function() {
   describe('filterTextHighlightRenderer', function() {
     const rowData = {a: 'abcabc', b: 'def', c: 123};
 
+    afterEach(function() {
+      React.unmountComponentAtNode(document.body);
+    });
+
     it('should not highlight when filter text is empty', function() {
       const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['a'], rowData, 'a', ''));
       const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
@@ -41,6 +45,43 @@ describe('column renderers', function() {
       expect(spans[1].getDOMNode().className).not.to.include('highlight');
       expect(spans[2].getDOMNode().textContent).to.equal('3');
       expect(spans[2].getDOMNode().className).to.include('highlight');
+    });
+  });
+
+  describe('barRenderer', function() {
+    const rowData = {a: 'abcabc', b: 'def', c: 50};
+
+    afterEach(function() {
+      React.unmountComponentAtNode(document.body);
+    });
+
+    it('should return an svg element', function() {
+      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'));
+      const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
+      const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
+      expect(svg).to.be.defined;
+      expect(svg.props.width).to.equal(100);
+      expect(svg.props.height).to.equal(20);
+    });
+
+    it('should render a bar inside the svg element', function() {
+      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'));
+      const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
+      const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
+      const rect = TU.findRenderedDOMComponentWithTag(renderTree, 'rect');
+      expect(rect).to.be.defined;
+      expect(rect.props.width).to.equal(50);
+      expect(rect.props.height).to.equal(20);
+      expect(rect.props.fill).to.equal('#cccccc');
+    });
+
+    it('should render a text element inside the svg element', function() {
+      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'));
+      const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
+      const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
+      const text = TU.findRenderedDOMComponentWithTag(renderTree, 'text');
+      expect(text).to.be.defined;
+      expect(text.getDOMNode().textContent).to.equal('50');
     });
   });
 });

@@ -26,6 +26,9 @@ const columns = [
   },
 ];
 const primaryKeyGen = R.prop('orderDate');
+const columnRenderers = {
+  total: SimpleSuperTable.columnRenderers.barRenderer(0, 2000, 200, 20, R.always('#0000cc')),
+};
 
 React.render(
   <SimpleSuperTable.default
@@ -33,7 +36,8 @@ React.render(
     columns={columns}
     primaryKeyGen={primaryKeyGen}
     title={'Sales in 2015'}
-    sortableColumns={['rep', 'item', 'units', 'unitCost', 'total']}
+    sortableColumns={['region', 'rep', 'item', 'units', 'unitCost', 'total']}
+    columnRenderers={columnRenderers}
   />,
   document.getElementById('component')
 );

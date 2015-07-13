@@ -22,6 +22,7 @@
     "test": "NODE_ENV=development ./node_modules/.bin/mocha test"
   },
   "dependencies": {
+    "d3-scale": "^0.1.1",
     "ramda": "^0.15.1",
     "react": "^0.13.3",
     "to-csv": "^0.1.0"
