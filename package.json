@@ -19,9 +19,9 @@
   },
   "dependencies": {
     "d3-scale": "^0.1.1",
+    "json2csv": "^2.4.3",
     "ramda": "^0.15.1",
-    "react": "^0.13.3",
-    "to-csv": "^0.1.0"
+    "react": "^0.13.3"
   },
   "devDependencies": {
     "autoprefixer-core": "^5.1.11",

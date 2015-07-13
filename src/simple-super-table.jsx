@@ -47,7 +47,7 @@ const SimpleSuperTable = React.createClass({
   },
 
   getInitialState: function() {
-    const sortableColumns = R.defaultTo(dataHelpers.extractColkeys(this.props.columns), this.props.sortableColumns);
+    const sortableColumns = R.defaultTo(dataHelpers.extractColKeys(this.props.columns), this.props.sortableColumns);
 
     return {
       filterText: '',
@@ -89,7 +89,7 @@ const SimpleSuperTable = React.createClass({
   },
 
   handleFilteredCSVClick: function(e) {
-    const colKeys = dataHelpers.extractColkeys(R.defaultTo(this.props.columns, this.props.columnsForDownload));
+    const colKeys = dataHelpers.extractColKeys(R.defaultTo(this.props.columns, this.props.columnsForDownload));
     const filterableColumns = R.defaultTo(colKeys, this.props.filterableColumns);
     const filteredData = R.ifElse(
       R.isEmpty,
@@ -97,19 +97,18 @@ const SimpleSuperTable = React.createClass({
       () => dataHelpers.filterData(filterableColumns, this.state.filterText, this.props.data)
     )(filterableColumns);
     const sortedFilteredData = dataHelpers.sortData(this.state.sortColKey, this.state.sortAscending, filteredData);
-    const projectedData = R.project(colKeys, sortedFilteredData);
     dataHelpers.pushDataForDownload(
       R.isEmpty(this.props.title) ? 'file' : this.props.title,
-      projectedData
+      R.defaultTo(this.props.columns, this.props.columnsForDownload),
+      sortedFilteredData
     );
   },
 
   handleOriginalCSVClick: function(e) {
-    const colKeys = dataHelpers.extractColkeys(R.defaultTo(this.props.columns, this.props.columnsForDownload));
-    const projectedData = R.project(colKeys, this.props.data);
     dataHelpers.pushDataForDownload(
       R.isEmpty(this.props.title) ? 'file' : this.props.title,
-      projectedData
+      R.defaultTo(this.props.columns, this.props.columnsForDownload),
+      this.props.data
     );
   },
 
@@ -120,7 +119,7 @@ const SimpleSuperTable = React.createClass({
       'Filter': 'Filter',
     }, R.defaultTo({}, this.props.messages));
 
-    const colKeys = dataHelpers.extractColkeys(this.props.columns);
+    const colKeys = dataHelpers.extractColKeys(this.props.columns);
     const filterableColumns = R.defaultTo(colKeys, this.props.filterableColumns);
     const filteredData = R.ifElse(
       R.isEmpty,
@@ -143,7 +142,7 @@ const SimpleSuperTable = React.createClass({
       }
     )(filterableColumns);
 
-    const sortableColumns = R.defaultTo(dataHelpers.extractColkeys(this.props.columns), this.props.sortableColumns);
+    const sortableColumns = R.defaultTo(dataHelpers.extractColKeys(this.props.columns), this.props.sortableColumns);
 
     const clickableClassName = R.isNil(this.props.onColumnClick) ?
       R.isNil(this.props.onRowClick) ? '' : 'row-clickable' : 'col-clickable';

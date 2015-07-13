@@ -1,12 +1,20 @@
 import React from 'react';
 import R from 'ramda';
-import toCSV from 'to-csv';
+import json2csv from 'json2csv';
 
 const dataHelpers = {
   // :: Ord[{k : v}] -> Ord[k]
-  extractColkeys: R.compose(
+  extractColKeys: R.compose(
     R.flatten,
     R.map(R.keys),
+    R.flatten,
+    R.map(R.ifElse(R.has('span'), R.prop('columns'), R.identity))
+  ),
+
+  // :: Ord[{k : v}] -> Ord[v]
+  extractColValues: R.compose(
+    R.flatten,
+    R.map(R.values),
     R.flatten,
     R.map(R.ifElse(R.has('span'), R.prop('columns'), R.identity))
   ),
@@ -28,13 +36,17 @@ const dataHelpers = {
   }),
 
   // Generate browser download for CSV
-  pushDataForDownload: function(fileName, data) {
-    const csvData = toCSV(data);
-    const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csvData}`);
-    const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `${fileName}.csv`);
-    link.click();
+  pushDataForDownload: function(fileName, columns, data) {
+    const fields = dataHelpers.extractColKeys(columns);
+    const fieldNames = dataHelpers.extractColValues(columns);
+
+    json2csv({data: data, fields: fields, fieldNames: fieldNames}, (err, csv) => {
+      const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csv}`);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', `${fileName}.csv`);
+      link.click();
+    });
   },
 };
 
