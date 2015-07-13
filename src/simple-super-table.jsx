@@ -22,6 +22,7 @@ const SimpleSuperTable = React.createClass({
     data: T.array.isRequired,
     columns: T.array.isRequired,
     primaryKeyGen: T.func.isRequired,
+    columnsForDownload: T.array,
     filterableColumns: T.array,
     defaultSortColumn: T.string,
     defaultSortAscending: T.bool,
@@ -88,7 +89,7 @@ const SimpleSuperTable = React.createClass({
   },
 
   handleFilteredCSVClick: function(e) {
-    const colKeys = dataHelpers.extractColkeys(this.props.columns);
+    const colKeys = dataHelpers.extractColkeys(R.defaultTo(this.props.columns, this.props.columnsForDownload));
     const filterableColumns = R.defaultTo(colKeys, this.props.filterableColumns);
     const filteredData = R.ifElse(
       R.isEmpty,
@@ -104,7 +105,7 @@ const SimpleSuperTable = React.createClass({
   },
 
   handleOriginalCSVClick: function(e) {
-    const colKeys = dataHelpers.extractColkeys(this.props.columns);
+    const colKeys = dataHelpers.extractColkeys(R.defaultTo(this.props.columns, this.props.columnsForDownload));
     const projectedData = R.project(colKeys, this.props.data);
     dataHelpers.pushDataForDownload(
       R.isEmpty(this.props.title) ? 'file' : this.props.title,

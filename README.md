@@ -20,13 +20,8 @@ Mixins are bad because they make assumptions about state/props.
 
 # Roadmap
 
-- ~~Basic table rendering~~
-- ~~Search & highlight matching text~~
-- ~~Sortable columns~~
-- ~~CSV export~~
 - Sticky headers
 - Custom sorters?
-- CSV export hidden columns/other dimensions?
 
 # Usage
 
@@ -81,6 +76,11 @@ const nestedColumns = [
   },
 ]
 ```
+
+### columnsForDownload
+
+Optional, array of objects. Specify the columns to include for download. Use the same syntax as 'columns' prop without
+nested headers. Defaults to columns.
 
 ### primaryKeyGen
 
