@@ -182,6 +182,18 @@ filtering.
 const filterableColumns = ['col1', 'col2'];
 ```
 
+### messages
+
+Optional object. Key value pair of messages to override with custom strings.
+
+```js
+const messages = {
+  'No data': 'My custom no data message',
+  'No matching data': 'My custom no matching data message',
+  'Filter': 'My custom filter message',
+};
+```
+
 ## Exposed CSS classes
 
 | Class Combination      | Element(s)                                                                                 |

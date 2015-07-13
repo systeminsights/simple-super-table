@@ -80,6 +80,8 @@ div.simple-super-table {
   }
 
   div.table-container {
+    display: flex;
+    flex-direction: column;
     flex: 1;
     overflow: auto;
 
@@ -132,6 +134,18 @@ div.simple-super-table {
             }
           }
         }
+      }
+    }
+
+    div.message-container {
+      display: flex;
+      flex: 1;
+      flex-shrink: 0;
+
+      h3.no-data-message,
+      h3.no-matching-data-message {
+        margin: auto;
+        margin-top: 5em;
       }
     }
   }

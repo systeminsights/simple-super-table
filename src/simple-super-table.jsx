@@ -32,6 +32,7 @@ const SimpleSuperTable = React.createClass({
     columnClassGetter: T.func,
     columnRenderers: T.object,
     title: T.string,
+    messages: T.object,
   },
 
   getDefaultProps: function() {
@@ -112,6 +113,12 @@ const SimpleSuperTable = React.createClass({
   },
 
   render: function() {
+    const messages = R.merge({
+      'No data': 'No data',
+      'No matching data': 'No matching data',
+      'Filter': 'Filter',
+    }, R.defaultTo({}, this.props.messages));
+
     const colKeys = dataHelpers.extractColkeys(this.props.columns);
     const filterableColumns = R.defaultTo(colKeys, this.props.filterableColumns);
     const filteredData = R.ifElse(
@@ -129,7 +136,7 @@ const SimpleSuperTable = React.createClass({
             type="text"
             className="filter"
             valueLink={this.linkState('filterText')}
-            placeholder={'Filter'}
+            placeholder={messages['Filter']}
           />
         );
       }
@@ -151,6 +158,26 @@ const SimpleSuperTable = React.createClass({
       () => null,
       () => <div className="title-container"><span className="title">{this.props.title}</span></div>
     )(this.props.title);
+
+    const messageContainer = R.ifElse(
+      R.identity,
+      ([data, sortedFilteredData]) => {
+        if (R.isEmpty(data)) {
+          return (
+            <div className="message-container">
+              <h3 className="no-data-message">{messages['No data']}</h3>
+            </div>
+          );
+        } else if (R.isEmpty(sortedFilteredData)) {
+          return (
+            <div className="message-container">
+              <h3 className="no-matching-data-message">{messages['No matching data']}</h3>
+            </div>
+          );
+        } else null
+      },
+      () => null
+    )([this.props.data, sortedFilteredData]);
 
     return (
       <div className={`simple-super-table ${clickableClassName}`}>
@@ -192,6 +219,7 @@ const SimpleSuperTable = React.createClass({
               columnClassGetter={this.props.columnClassGetter}
             />
           </table>
+          {messageContainer}
         </div>
       </div>
     );
