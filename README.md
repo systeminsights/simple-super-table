@@ -20,11 +20,13 @@ Mixins are bad because they make assumptions about state/props.
 
 # Roadmap
 
-- Basic table rendering
-- Search & highlight matching text
-- Sortable columns
-- CSV export
+- ~~Basic table rendering~~
+- ~~Search & highlight matching text~~
+- ~~Sortable columns~~
+- ~~CSV export~~
 - Sticky headers
+- Custom sorters?
+- CSV export hidden columns/other dimensions?
 
 # Usage
 
@@ -267,4 +269,10 @@ const YourComponent extends React.component {
 
 <div>Icons made by <a href="http://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 <div>Icon made by <a href="http://fontawesome.io" title="Dave Gandy">Dave Gandy</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+
+# Contributing
+
+The project is written in JS es6 and uses webpack for packaging stuff. Io.js is required to run the tests and build the project.
+`npm run build-dist` creates the distribution build, do this everytime you make changes to the project.
+`npm start` starts the playground app, from app.js and index.html. Styles are defined in src/style.less.
 
