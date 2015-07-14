@@ -182,16 +182,26 @@ const SimpleSuperTable = React.createClass({
       () => null
     )([this.props.data, sortedFilteredData]);
 
+    const filterCsvButton = R.ifElse(
+      R.isEmpty,
+      () => null,
+      () => {
+        return (
+          <div
+            className={`csv-filter ${R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? 'disabled' : ''}`}
+            onClick={R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? null : this.handleFilteredCSVClick}
+          ><CsvFilterIcon size={27.5} /></div>
+        );
+      }
+    )(filterableColumns)
+
     return (
       <div className={`simple-super-table ${clickableClassName}`}>
         <div className="top-bar">
           {titleContainer}
           {filterContainer}
           <div className="csv-container">
-            <div
-              className={`csv-filter ${R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? 'disabled' : ''}`}
-              onClick={R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? null : this.handleFilteredCSVClick}
-            ><CsvFilterIcon size={27.5} /></div>
+            {filterCsvButton}
             <div
               className={`original-csv ${R.isEmpty(this.props.data) ? 'disabled' : ''}`}
               onClick={R.isEmpty(this.props.data) ? null : this.handleOriginalCSVClick}

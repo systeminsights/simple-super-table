@@ -179,4 +179,26 @@ describe('CSV export', function() {
       expect(mockLink.setAttribute).not.to.have.been.calledWith('download', 'Test Table.csv');
     });
   });
+
+  describe('no filterable columns', function() {
+    beforeEach(function() {
+      renderTree = TU.renderIntoDocument(
+        <SimpleSuperTable
+          data={data}
+          columns={columns}
+          primaryKeyGen={primaryKeyGen}
+          filterableColumns={[]}
+        />
+      );
+    });
+
+    afterEach(function() {
+      React.unmountComponentAtNode(document.body);
+    });
+
+    it('should not render the csv filter button', function() {
+      const filterCSVButton = TU.scryRenderedDOMComponentsWithClass(renderTree, 'csv-filter');
+      expect(filterCSVButton.length).to.equal(0);
+    });
+  });
 });
