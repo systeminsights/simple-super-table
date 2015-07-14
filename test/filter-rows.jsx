@@ -124,9 +124,9 @@ describe('filtering rows', function() {
       React.unmountComponentAtNode(document.body);
     });
 
-    it('should not render the input element', function() {
-      const inputFields = TU.scryRenderedDOMComponentsWithTag(renderTree, 'input');
-      expect(inputFields.length).to.equal(0);
+    it('should not render the filter box', function() {
+      const filterContainer = TU.scryRenderedDOMComponentsWithClass(renderTree, 'filter-container');
+      expect(filterContainer.length).to.equal(0);
     });
   });
 });

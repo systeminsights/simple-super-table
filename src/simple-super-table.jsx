@@ -127,17 +127,20 @@ const SimpleSuperTable = React.createClass({
       () => dataHelpers.filterData(filterableColumns, this.state.filterText, this.props.data)
     )(filterableColumns);
     const sortedFilteredData = dataHelpers.sortData(this.state.sortColKey, this.state.sortAscending, filteredData);
-    const filterTextInput = R.ifElse(
+    const filterContainer = R.ifElse(
       R.isEmpty,
       () => null,
       () => {
         return (
-          <input
-            type="text"
-            className="filter"
-            valueLink={this.linkState('filterText')}
-            placeholder={messages['Filter']}
-          />
+          <div className="filter-container">
+            <div className="icon"><FilterIcon size={15} /></div>
+            <input
+              type="text"
+              className="filter"
+              valueLink={this.linkState('filterText')}
+              placeholder={messages['Filter']}
+            />
+          </div>
         );
       }
     )(filterableColumns);
@@ -183,10 +186,7 @@ const SimpleSuperTable = React.createClass({
       <div className={`simple-super-table ${clickableClassName}`}>
         <div className="top-bar">
           {titleContainer}
-          <div className="filter-container">
-            <div className="icon"><FilterIcon size={15} /></div>
-            {filterTextInput}
-          </div>
+          {filterContainer}
           <div className="csv-container">
             <div
               className={`csv-filter ${R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? 'disabled' : ''}`}
