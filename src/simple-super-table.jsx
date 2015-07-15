@@ -4,6 +4,7 @@ const {LinkedStateMixin} = React.addons;
 import R from 'ramda';
 
 import CsvIcon from './svg/csv-icon';
+import DownloadIcon from './svg/download-icon';
 import FilterIcon from './svg/filter-icon';
 import CsvFilterIcon from './svg/csv-filter-icon';
 
@@ -182,18 +183,19 @@ const SimpleSuperTable = React.createClass({
       () => null
     )([this.props.data, sortedFilteredData]);
 
-    const filterCsvButton = R.ifElse(
-      R.isEmpty,
-      () => null,
-      () => {
-        return (
-          <div
-            className={`csv-filter ${R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? 'disabled' : ''}`}
-            onClick={R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? null : this.handleFilteredCSVClick}
-          ><CsvFilterIcon size={27.5} /></div>
-        );
-      }
-    )(filterableColumns)
+    //const filterCsvButton = R.ifElse(
+    //  R.isEmpty,
+    //  () => null,
+    //  () => {
+    //    return (
+    //      <div
+    //        className={`csv-filter ${R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? 'disabled' : ''}`}
+    //        onClick={R.isEmpty(this.props.data) || R.isEmpty(sortedFilteredData) ? null : this.handleFilteredCSVClick}
+    //      ><CsvFilterIcon size={27.5} /></div>
+    //    );
+    //  }
+    //)(filterableColumns)
+    const filterCsvButton = null;
 
     return (
       <div className={`simple-super-table ${clickableClassName}`}>
@@ -205,7 +207,7 @@ const SimpleSuperTable = React.createClass({
             <div
               className={`original-csv ${R.isEmpty(this.props.data) ? 'disabled' : ''}`}
               onClick={R.isEmpty(this.props.data) ? null : this.handleOriginalCSVClick}
-            ><CsvIcon size={27.5} /></div>
+            ><DownloadIcon size={18} /></div>
           </div>
         </div>
         <div className="table-container">

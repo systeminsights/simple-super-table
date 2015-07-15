@@ -38,7 +38,7 @@ div.simple-super-table {
         display: flex;
         padding-left: 0.5em;
         padding-right: 0.5em;
-        background: darken(@headerBgColor, 10%);
+        fill: #aaa;
 
         * {
           margin: auto;
@@ -64,13 +64,14 @@ div.simple-super-table {
       display: flex;
       flex-shrink: 0;
       margin-left: 0.5em;
+      margin-right: 0.25em;
 
       div.original-csv,
       div.csv-filter {
         margin: auto 0.25em;
         cursor: pointer;
-        width: 27.5px;
-        height: 27.5px;
+        width: 18px;
+        height: 18px;
         fill: #232323;
 
         &.disabled {
