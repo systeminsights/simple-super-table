@@ -1,5 +1,7 @@
 # Simple Super Table
 
+[![Build Status](https://travis-ci.org/santhosbaala/simple-super-table.svg?branch=master)](https://travis-ci.org/santhosbaala/simple-super-table)
+
 React component for rendering low volume data tables (~500). Provides search,
 sort and csv export for free.
 
