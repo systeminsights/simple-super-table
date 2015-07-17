@@ -70,7 +70,7 @@ const SimpleSuperTable = React.createClass({
   handleRowClick: function(e) {
     if (!R.isNil(this.props.onRowClick)) {
       const primaryKey = e.currentTarget.getAttribute('data-primary-key');
-      const foundRow = R.find((d) => R.equals(primaryKey, this.props.primaryKeyGen(d)))(this.props.data);
+      const foundRow = R.find((d) => R.equals(primaryKey, this.props.primaryKeyGen(d).toString()))(this.props.data);
       if (!R.isNil(foundRow)) {
         this.props.onRowClick(foundRow);
       }
