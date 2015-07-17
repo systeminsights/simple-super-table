@@ -15,34 +15,63 @@ describe('events', function() {
     {c: 'C'},
   ];
   const primaryKeyGen = R.prop('a');
+  const primaryIntKeyGen = R.prop('c');
   let renderTree = null;
 
   describe('row click', function () {
     let rowClickHandler = null;
 
-    beforeEach(function () {
-      rowClickHandler = sinon.stub();
+    describe('when primary key is a string', function() {
+      beforeEach(function () {
+        rowClickHandler = sinon.stub();
 
-      renderTree = TU.renderIntoDocument(
-        <SimpleSuperTable
-          data={data}
-          columns={columns}
-          primaryKeyGen={primaryKeyGen}
-          onRowClick={rowClickHandler}
-        />
-      );
+        renderTree = TU.renderIntoDocument(
+          <SimpleSuperTable
+            data={data}
+            columns={columns}
+            primaryKeyGen={primaryKeyGen}
+            onRowClick={rowClickHandler}
+          />
+        );
+      });
+
+      afterEach(function () {
+        React.unmountComponentAtNode(document.body);
+      });
+
+      it('should invoke the row click handler', function () {
+        const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
+        const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
+        expect(trs.length).to.equal(3);
+        TU.Simulate.click(trs[1].getDOMNode());
+        expect(rowClickHandler).to.have.been.calledWith(data[1]);
+      });
     });
+    describe('when primary key is not a string', function() {
+      beforeEach(function () {
+        rowClickHandler = sinon.stub();
 
-    afterEach(function () {
-      React.unmountComponentAtNode(document.body);
-    });
+        renderTree = TU.renderIntoDocument(
+          <SimpleSuperTable
+            data={data}
+            columns={columns}
+            primaryKeyGen={primaryIntKeyGen}
+            onRowClick={rowClickHandler}
+          />
+        );
+      });
 
-    it('should invoke the row click handler', function () {
-      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
-      const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
-      expect(trs.length).to.equal(3);
-      TU.Simulate.click(trs[1].getDOMNode());
-      expect(rowClickHandler).to.have.been.calledWith(data[1]);
+      afterEach(function () {
+        React.unmountComponentAtNode(document.body);
+      });
+
+      it('should invoke the row click handler', function () {
+        const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
+        const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
+        expect(trs.length).to.equal(3);
+        TU.Simulate.click(trs[1].getDOMNode());
+        expect(rowClickHandler).to.have.been.calledWith(data[1]);
+      });
     });
   });
 
