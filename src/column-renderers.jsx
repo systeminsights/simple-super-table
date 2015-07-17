@@ -10,6 +10,9 @@ function escapeRegExp(str) {
 // exposes .filter-highlight CSS class
 export function filterTextHighlightRenderer(colData, _, __, filterText) {
   let children = null;
+  if (R.isNil(colData) || R.isEmpty(colData)) {
+    return <span className="filter-text-highlight">-</span>;;
+  }
   colData = colData.toString();
   filterText = filterText.toString();
 
@@ -33,7 +36,6 @@ export function filterTextHighlightRenderer(colData, _, __, filterText) {
   } else {
     children = colData;
   }
-
   return <span className="filter-text-highlight">{children}</span>;
 }
 

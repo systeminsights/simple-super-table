@@ -5,7 +5,7 @@ import {columnRenderers} from '../src';
 
 describe('column renderers', function() {
   describe('filterTextHighlightRenderer', function() {
-    const rowData = {a: 'abcabc', b: 'def', c: 123};
+    const rowData = {a: 'abcabc', b: 'def', c: 123, d: null, e: '', f: undefined};
 
     afterEach(function() {
       React.unmountComponentAtNode(document.body);
@@ -45,6 +45,27 @@ describe('column renderers', function() {
       expect(spans[1].getDOMNode().className).not.to.include('highlight');
       expect(spans[2].getDOMNode().textContent).to.equal('3');
       expect(spans[2].getDOMNode().className).to.include('highlight');
+    });
+
+    it('should render "-" for null data', function() {
+      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['d'], rowData, 'd', ''));
+      const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
+      expect(spans.length).to.equal(1);
+      expect(spans[0].getDOMNode().textContent).to.equal('-');
+    });
+
+    it('should render "-" for empty data', function() {
+      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['e'], rowData, 'e', ''));
+      const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
+      expect(spans.length).to.equal(1);
+      expect(spans[0].getDOMNode().textContent).to.equal('-');
+    });
+
+    it('should render "-" for undefined data', function() {
+      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['f'], rowData, 'f', ''));
+      const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
+      expect(spans.length).to.equal(1);
+      expect(spans[0].getDOMNode().textContent).to.equal('-');
     });
   });
 
