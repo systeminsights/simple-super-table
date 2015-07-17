@@ -24,7 +24,7 @@ const dataHelpers = {
     return R.filter(R.compose(
       R.match(new RegExp(filterText, 'gi')),
       R.join(' '),
-      R.map((v) => v.toString()),
+      R.map((v) => R.isNil(v) ? '' : v.toString()),
       R.props(filterByColKeys)
     ))(data);
   }),
