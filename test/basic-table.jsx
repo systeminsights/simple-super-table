@@ -5,14 +5,15 @@ import SimpleSuperTable from '../src';
 
 describe('basic table rendering', function() {
   const data = [
-    {a: 'abc', b: 'def', c: '123'},
-    {a: 'jkl', b: 'mno', c: '456'},
-    {a: 'pqr', b: 'stu', c: '789'},
+    {a: 'abc', b: 'def', c: '123', d: ''},
+    {a: 'jkl', b: 'mno', c: '456', d: 'xyz'},
+    {a: 'pqr', b: 'stu', c: '789', d: null},
   ];
   const columns = [
     {a: 'A'},
     {b: 'B'},
     {c: 'C'},
+    {d: 'D'}
   ];
   const primaryKeyGen = R.prop('a');
   const title = 'Test Table';
@@ -24,6 +25,7 @@ describe('basic table rendering', function() {
         data={data}
         columns={columns}
         primaryKeyGen={primaryKeyGen}
+        filterableColumns={['a', 'b', 'c']}
         title={title}
       />
     );
@@ -81,38 +83,44 @@ describe('basic table rendering', function() {
     const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
     const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
     const tds = TU.scryRenderedDOMComponentsWithTag(trs[0], 'td');
-    expect(tds.length).to.equal(3);
+    expect(tds.length).to.equal(4);
     expect(tds[0].getDOMNode().textContent).to.equal(data[0]['a']);
     expect(tds[0]._reactInternalInstance._currentElement.key).to.equal('a');
     expect(tds[1].getDOMNode().textContent).to.equal(data[0]['b']);
     expect(tds[1]._reactInternalInstance._currentElement.key).to.equal('b');
     expect(tds[2].getDOMNode().textContent).to.equal(data[0]['c']);
     expect(tds[2]._reactInternalInstance._currentElement.key).to.equal('c');
+    expect(tds[3].getDOMNode().textContent).to.equal('-');
+    expect(tds[3]._reactInternalInstance._currentElement.key).to.equal('d');
   });
 
   it('should render row 2 with column data', function() {
     const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
     const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
     const tds = TU.scryRenderedDOMComponentsWithTag(trs[1], 'td');
-    expect(tds.length).to.equal(3);
+    expect(tds.length).to.equal(4);
     expect(tds[0].getDOMNode().textContent).to.equal(data[1]['a']);
     expect(tds[0]._reactInternalInstance._currentElement.key).to.equal('a');
     expect(tds[1].getDOMNode().textContent).to.equal(data[1]['b']);
     expect(tds[1]._reactInternalInstance._currentElement.key).to.equal('b');
     expect(tds[2].getDOMNode().textContent).to.equal(data[1]['c']);
     expect(tds[2]._reactInternalInstance._currentElement.key).to.equal('c');
+    expect(tds[3].getDOMNode().textContent).to.equal(data[1]['d']);
+    expect(tds[3]._reactInternalInstance._currentElement.key).to.equal('d');
   });
 
   it('should render row 3 with column data', function() {
     const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
     const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
     const tds = TU.scryRenderedDOMComponentsWithTag(trs[2], 'td');
-    expect(tds.length).to.equal(3);
+    expect(tds.length).to.equal(4);
     expect(tds[0].getDOMNode().textContent).to.equal(data[2]['a']);
     expect(tds[0]._reactInternalInstance._currentElement.key).to.equal('a');
     expect(tds[1].getDOMNode().textContent).to.equal(data[2]['b']);
     expect(tds[1]._reactInternalInstance._currentElement.key).to.equal('b');
     expect(tds[2].getDOMNode().textContent).to.equal(data[2]['c']);
     expect(tds[2]._reactInternalInstance._currentElement.key).to.equal('c');
+    expect(tds[3].getDOMNode().textContent).to.equal('-');
+    expect(tds[3]._reactInternalInstance._currentElement.key).to.equal('d');
   });
 });
