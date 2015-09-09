@@ -4,8 +4,8 @@ import R from 'ramda';
 
 import renderHelpers from './render-helpers';
 
-const extractSpannedColumns = function(columnsWithSpans) {
-  let spannedColumns = [];
+const extractSpannedColumns = function extractSpannedColumns(columnsWithSpans) {
+  const spannedColumns = [];
   const columns = R.mapIndexed((c, i) => {
     if (R.has('span', c)) {
       spannedColumns.push({
@@ -14,9 +14,9 @@ const extractSpannedColumns = function(columnsWithSpans) {
         position: R.last(spannedColumns) ? (i - R.last(spannedColumns).position) + (R.last(spannedColumns).position + R.last(spannedColumns).spanLength - 1) : i,
       });
       return c.columns;
-    } else {
-      return c;
     }
+
+    return c;
   })(columnsWithSpans);
 
   return {
@@ -34,7 +34,7 @@ const Header = React.createClass({
     onHeaderClick: T.func.isRequired,
   },
 
-  render: function() {
+  render: function render() {
     const {spannedColumns, columns} = extractSpannedColumns(this.props.columns);
 
     const rowForSpannedColumns = R.ifElse(
@@ -56,9 +56,9 @@ const Header = React.createClass({
               position: R.last(acc).position + R.last(acc).spanLength,
               spanLength: next.position - (R.last(acc).position + R.last(acc).spanLength),
             }, next]);
-          } else {
-            return R.append(next, acc);
           }
+
+          return R.append(next, acc);
         })([], spannedColumns);
 
         const rightPadding = R.ifElse(
@@ -74,7 +74,7 @@ const Header = React.createClass({
                 <th
                   key={c.position}
                   colSpan={c.spanLength}
-                  >{c.label}</th>
+                >{c.label}</th>
               );
             })(paddedSpannedColumns.concat(rightPadding))}
           </tr>
@@ -84,15 +84,15 @@ const Header = React.createClass({
 
     return (
       <thead>
-        {rowForSpannedColumns}
-        <tr>
-          {R.map(renderHelpers.renderHeader(
-            this.props.onHeaderClick,
-            this.props.sortableColumns,
-            this.props.sortColKey,
-            this.props.sortAscending
-          ))(columns)}
-        </tr>
+      {rowForSpannedColumns}
+      <tr>
+        {R.map(renderHelpers.renderHeader(
+          this.props.onHeaderClick,
+          this.props.sortableColumns,
+          this.props.sortColKey,
+          this.props.sortAscending
+        ))(columns)}
+      </tr>
       </thead>
     );
   },

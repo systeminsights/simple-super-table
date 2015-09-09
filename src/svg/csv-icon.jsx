@@ -6,13 +6,13 @@ const CsvIcon = React.createClass({
     size: T.number,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function getDefaultProps() {
     return {
       size: 35,
     };
   },
 
-  render: function() {
+  render: function render() {
     return (
       <svg viewBox="0 0 548.29 549.29" width={this.props.size} height={this.props.size}>
         <path d="M486.2,196.121h-13.164V132.59c0-0.399-0.064-0.795-0.116-1.2c-0.021-2.52-0.824-5-2.551-6.96L364.656,3.677

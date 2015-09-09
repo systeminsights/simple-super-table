@@ -9,13 +9,13 @@ const CsvFilterIcon = React.createClass({
     size: T.number,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function getDefaultProps() {
     return {
       size: 35,
     };
   },
 
-  render: function() {
+  render: function render() {
     return (
       <div style={{position: 'relative'}}>
         <div style={{width: this.props.size, height: this.props.size}} />

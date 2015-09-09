@@ -8,13 +8,13 @@ const SortIcon = React.createClass({
     ascending: T.bool.isRequired,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function getDefaultProps() {
     return {
       size: 30,
     };
   },
 
-  render: function() {
+  render: function render() {
     const ascendingFill = this.props.sorted && this.props.ascending ? 'rgba(0, 0, 0, 1)' : 'rgba(0, 0, 0, 0.25)';
     const descendingFill = this.props.sorted && !this.props.ascending ? 'rgba(0, 0, 0, 1)' : 'rgba(0, 0, 0, 0.25)';
 

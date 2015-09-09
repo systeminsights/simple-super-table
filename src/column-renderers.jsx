@@ -11,14 +11,16 @@ function escapeRegExp(str) {
 export function filterTextHighlightRenderer(colData, _, __, filterText) {
   let children = null;
   if (R.isNil(colData) || R.isEmpty(colData)) {
-    return <span className="filter-text-highlight">-</span>;;
+    return <span className="filter-text-highlight">-</span>;
   }
-  colData = colData.toString();
-  filterText = filterText.toString();
 
-  if (!R.isEmpty(filterText) && filterText.match(new RegExp(escapeRegExp(filterText), 'gi'))) {
-    const SENTINEL_BEG = '-|[', SENTINEL_END = ']|-';
-    let marked = colData.replace(new RegExp(escapeRegExp(filterText), 'gi'), `${SENTINEL_BEG}$&${SENTINEL_END}`);
+  const _colData = colData.toString();
+  const _filterText = filterText.toString();
+
+  if (!R.isEmpty(_filterText) && _filterText.match(new RegExp(escapeRegExp(_filterText), 'gi'))) {
+    const SENTINEL_BEG = '-|[';
+    const SENTINEL_END = ']|-';
+    let marked = _colData.replace(new RegExp(escapeRegExp(_filterText), 'gi'), `${SENTINEL_BEG}$&${SENTINEL_END}`);
     children = [];
     while (marked.indexOf(SENTINEL_BEG) >= 0) {
       const left = marked.substring(0, marked.indexOf(SENTINEL_BEG));
@@ -34,7 +36,7 @@ export function filterTextHighlightRenderer(colData, _, __, filterText) {
       children.push(<span key={children.length}>{marked}</span>);
     }
   } else {
-    children = colData;
+    children = _colData;
   }
   return <span className="filter-text-highlight">{children}</span>;
 }

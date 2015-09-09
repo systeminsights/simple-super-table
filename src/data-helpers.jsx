@@ -36,7 +36,7 @@ const dataHelpers = {
   }),
 
   // Generate browser download for CSV
-  pushDataForDownload: function(fileName, columns, data) {
+  pushDataForDownload: function pushDataForDownload(fileName, columns, data) {
     const fields = dataHelpers.extractColKeys(columns);
     const fieldNames = dataHelpers.extractColValues(columns);
 

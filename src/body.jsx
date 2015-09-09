@@ -17,7 +17,7 @@ const Body = React.createClass({
     columnClassGetter: T.func,
   },
 
-  render: function() {
+  render: function render() {
     return (
       <tbody>
         {R.map(renderHelpers.renderRow(

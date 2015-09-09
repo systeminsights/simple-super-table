@@ -6,13 +6,13 @@ const FilterIcon = React.createClass({
     size: T.number,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function getDefaultProps() {
     return {
       size: 35,
     };
   },
 
-  render: function() {
+  render: function render() {
     return (
       <svg viewBox="0 0 264.711 264.711" width={this.props.size} height={this.props.size}>
         <path d="M242.385,5c0-2.761-2.238-5-5-5h-210c-2.762,0-5,2.239-5,5v39.229c0,0.037,0.01,0.07,0.011,0.106

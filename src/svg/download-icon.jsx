@@ -6,13 +6,13 @@ const DownloadIcon = React.createClass({
     size: T.number,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function getDefaultProps() {
     return {
       size: 35,
     };
   },
 
-  render: function() {
+  render: function render() {
     return (
       <svg viewBox="0 0 537.795 537.795" width={this.props.size} height={this.props.size}>
         <path d="M463.091,466.114H74.854c-11.857,0-21.497,9.716-21.497,21.497v28.688c0,11.857,9.716,21.496,21.497,21.496h388.084
