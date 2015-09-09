@@ -1,6 +1,6 @@
 # Simple Super Table
 
-[![Build Status](https://travis-ci.org/santhosbaala/simple-super-table.svg?branch=master)](https://travis-ci.org/santhosbaala/simple-super-table)
+[![Build Status](https://travis-ci.org/systeminsights/simple-super-table.svg?branch=master)](https://travis-ci.org/systeminsights/simple-super-table)
 
 React component for rendering low volume data tables (~500). Provides search,
 sort and csv export for free.
@@ -62,27 +62,30 @@ columns can be nested to render spanned headers.
 
 ```js
 const columns = [
-  {col1: 'Column 1'},
-  {col2: 'Column 2'},
-  {col3: 'Something else'},
+  {col1: 'Column 1', type: <type>},
+  {col2: 'Column 2', type: <type>},
+  {col3: 'Something else', type: <type>},
 ];
 
 const nestedColumns = [
-  {col1: 'Column 1'},
+  {col1: 'Column 1', type: <type>},
   {
     span: 'Column 2',
     columns: [
-      {col2: 'A'},
-      {col3: 'B'},
+      {col2: 'A', type: <type>},
+      {col3: 'B', type: <type>},
     ],
   },
 ]
+
+// <type> can be one of timestamp, number or string, defaults to string.
+
 ```
 
 ### columnsForDownload
 
-Optional, array of objects. Specify the columns to include for download. Use the same syntax as 'columns' prop without
-nested headers. Defaults to columns.
+Optional, array of objects. Specify the columns to include for download. Use the same syntax as 'columns' (except the 
+data property) prop without nested headers. Defaults to columns.
 
 ### primaryKeyGen
 
