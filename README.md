@@ -67,7 +67,8 @@ const nestedColumns = [
 
 ### columnsForDownload
 
-Optional, array of objects. Specify the columns to include for download. Use the same syntax as 'columns' (except the sorter property) prop without nested headers. Defaults to columns.
+Optional, array of objects. Specify the columns to include for download. Use the
+same syntax as 'columns' prop without nested headers. Defaults to columns.
 
 ### primaryKeyGen
 
@@ -90,7 +91,7 @@ order.
 ```js
 const columnSorters = {
   col1: function(data, colKey) {
-    return sorterRows;
+    return sortedRows;
   },
 };
 ```
