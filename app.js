@@ -3,8 +3,15 @@ import './src/style.less';
 
 import React from 'react';
 import R from 'ramda';
+import moment from 'moment';
 
 import SampleData from './fixtures/sample-data.json';
+
+const dateSorter = function(data, colKey) {
+  return R.sort((a, b) => {
+    return moment(R.prop(colKey, a), 'M/D/YY').valueOf() - moment(R.prop(colKey, b), 'M/D/YY').valueOf();
+  })(data);
+};
 
 const data = SampleData.orders;
 const columns = [
@@ -27,6 +34,9 @@ const columns = [
   },
 ];
 const primaryKeyGen = R.prop('orderDate');
+const columnSorters = {
+  orderDate: dateSorter,
+};
 const columnRenderers = {
   total: SimpleSuperTable.columnRenderers.barRenderer(0, 2000, 200, 20, R.always('#0000cc'), (_) => _),
 };
@@ -37,7 +47,7 @@ React.render(
     columns={columns}
     primaryKeyGen={primaryKeyGen}
     title={'Sales in 2015'}
-    sortableColumns={['region', 'rep', 'item', 'units', 'unitCost', 'total']}
+    columnSorters={columnSorters}
     columnRenderers={columnRenderers}
   />,
   document.getElementById('component')

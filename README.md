@@ -5,25 +5,10 @@
 React component for rendering low volume data tables (~500). Provides search,
 sort and csv export for free.
 
-## 2.0 - Lessons from 1.0
-
-- Nobody asked for un-camelcasing and titlecasing the headers.
-- Take a function for primary key generation.
-- Spans are bad. Give the entire data, let the table decide what to do.
-- Rows are rows and columns are columns, no cells involved. Its easier to
-identify a data point with rowdata[colKey]. Use maps (objects) instead of
-arrays and indexes wherever possible.
-- Request for external stylesheet, assign base classes.
-- *Always* write tests first. Make the tests as much e2e as possible.
-- Avoid splitting functionality into mixins, use helper objects instead.
-Mixins are bad because they make assumptions about state/props.
-- Headers can span.
-- Cache search results.
-
 # Roadmap
 
 - Sticky headers
-- Custom sorters?
+- Cache search results.
 
 # Usage
 
@@ -62,30 +47,27 @@ columns can be nested to render spanned headers.
 
 ```js
 const columns = [
-  {col1: 'Column 1', type: <type>},
-  {col2: 'Column 2', type: <type>},
-  {col3: 'Something else', type: <type>},
+  {col1: 'Column 1'},
+  {col2: 'Column 2', sorter: <function>},
+  {col3: 'Something else', sorter: <function>},
 ];
 
 const nestedColumns = [
-  {col1: 'Column 1', type: <type>},
+  {col1: 'Column 1'},
   {
     span: 'Column 2',
     columns: [
-      {col2: 'A', type: <type>},
-      {col3: 'B', type: <type>},
+      {col2: 'A'},
+      {col3: 'B'},
     ],
   },
 ]
-
-// <type> can be one of timestamp, number or string, defaults to string.
 
 ```
 
 ### columnsForDownload
 
-Optional, array of objects. Specify the columns to include for download. Use the same syntax as 'columns' (except the 
-data property) prop without nested headers. Defaults to columns.
+Optional, array of objects. Specify the columns to include for download. Use the same syntax as 'columns' (except the sorter property) prop without nested headers. Defaults to columns.
 
 ### primaryKeyGen
 
@@ -95,6 +77,21 @@ data property) prop without nested headers. Defaults to columns.
 ```js
 const primaryKeyGen = function primaryKeyGen(rowData) {
   return rowData['col1'];
+};
+```
+
+### columnSorters
+
+Optional, object. Custom sorting functions for columns. Expects the key to be
+column keys and values to be functions. The function will be invoked with rows
+and the column key. The function has to return the ordered rows in ascending
+order.
+
+```js
+const columnSorters = {
+  col1: function(data, colKey) {
+    return sorterRows;
+  },
 };
 ```
 
@@ -224,7 +221,7 @@ The project bundles commonly used column renderers. You can compose them inside 
 ### barRenderer
 
 Renders a horizontal bar. To create a new renderer, pass minValue, maxValue, width, height, a color mapper function and
-a data formatter function. The color mapper and data formatter functions will be invoked with the column data and row 
+a data formatter function. The color mapper and data formatter functions will be invoked with the column data and row
 data.
 
 ```js
@@ -280,4 +277,3 @@ const YourComponent extends React.component {
 The project is written in JS es6 and uses webpack for packaging stuff. Io.js is required to run the tests and build the project.
 `npm run build-dist` creates the distribution build, do this everytime you make changes to the project.
 `npm start` starts the playground app, from app.js and index.html. Styles are defined in src/style.less.
-

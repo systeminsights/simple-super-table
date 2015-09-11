@@ -261,4 +261,57 @@ describe('sort', function() {
       expect(TU.scryRenderedDOMComponentsWithTag(trs[2], 'td')[2].getDOMNode().textContent).to.equal(data[2]['c'].toString());
     });
   });
+
+  describe('custom sorter', function() {
+    const columnASorter = sinon.spy(function(data, colKey) {
+      return R.sort((a, b) => {
+        // Custom ordering jkl < abc < stu
+        const ordering = {jkl: 0, abc: 1, stu: 2};
+        return ordering[R.prop(colKey, a)] - ordering[R.prop(colKey, b)];
+      }, data);
+    });
+
+    beforeEach(function() {
+      renderTree = TU.renderIntoDocument(
+        <SimpleSuperTable
+          data={data}
+          columns={columns}
+          primaryKeyGen={primaryKeyGen}
+          defaultSortColumn={'c'}
+          columnSorters={{a: columnASorter}}
+        />
+      );
+    });
+
+    afterEach(function() {
+      React.unmountComponentAtNode(document.body);
+    });
+
+    it('should sort column a using custom sorter', function() {
+      const thead = TU.findRenderedDOMComponentWithTag(renderTree, 'thead');
+      const ths = TU.scryRenderedDOMComponentsWithTag(thead, 'th');
+      TU.Simulate.click(ths[0].getDOMNode());
+      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
+      const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
+      expect(trs.length).to.equal(3);
+      expect(columnASorter).to.have.been.calledWith(data, 'a');
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[0], 'td')[0].getDOMNode().textContent).to.equal(data[2]['a'].toString());
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[1], 'td')[0].getDOMNode().textContent).to.equal(data[1]['a'].toString());
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[2], 'td')[0].getDOMNode().textContent).to.equal(data[0]['a'].toString());
+    });
+
+    it('should sort column a using custom sorter in descending order', function() {
+      const thead = TU.findRenderedDOMComponentWithTag(renderTree, 'thead');
+      const ths = TU.scryRenderedDOMComponentsWithTag(thead, 'th');
+      TU.Simulate.click(ths[0].getDOMNode());
+      TU.Simulate.click(ths[0].getDOMNode());
+      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
+      const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
+      expect(trs.length).to.equal(3);
+      expect(columnASorter).to.have.been.calledWith(data, 'a');
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[0], 'td')[0].getDOMNode().textContent).to.equal(data[0]['a'].toString());
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[1], 'td')[0].getDOMNode().textContent).to.equal(data[1]['a'].toString());
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[2], 'td')[0].getDOMNode().textContent).to.equal(data[2]['a'].toString());
+    });
+  });
 });

@@ -27,6 +27,7 @@ const SimpleSuperTable = React.createClass({
     onColumnClick: T.func,
     rowClassGetter: T.func,
     columnClassGetter: T.func,
+    columnsSorters: T.object,
     columnRenderers: T.object,
     title: T.string,
     messages: T.object,
@@ -39,6 +40,7 @@ const SimpleSuperTable = React.createClass({
       defaultSortAscending: true,
       rowClassGetter: R.always(''),
       columnClassGetter: R.always(''),
+      columnSorters: {},
       columnRenderers: {},
       title: '',
     };
@@ -68,7 +70,15 @@ const SimpleSuperTable = React.createClass({
       () => this.props.data,
       () => dataHelpers.filterData(filterableColumns, this.state.filterText, this.props.data)
     )(filterableColumns);
-    const sortedFilteredData = dataHelpers.sortData(this.state.sortColKey, this.state.sortAscending, filteredData);
+
+    const sortedFilteredData = (() => {
+      if (R.has(this.state.sortColKey, this.props.columnSorters)) {
+        const sortedData = this.props.columnSorters[this.state.sortColKey](filteredData, this.state.sortColKey);
+        return this.state.sortAscending ? sortedData : R.reverse(sortedData);
+      }
+      return dataHelpers.sortData(this.state.sortColKey, this.state.sortAscending, filteredData);
+    })();
+
     const filterContainer = R.ifElse(
       R.isEmpty,
       () => null,
