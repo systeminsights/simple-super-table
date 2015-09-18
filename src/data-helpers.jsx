@@ -31,7 +31,7 @@ const dataHelpers = {
 
   // :: String -> Bool -> [Object] -> [Object]
   sortData: R.curry((colKey, sortAscending, data) => {
-    const sortedData = R.sortBy(R.prop(colKey))(data);
+    const sortedData = R.sortBy(R.compose(R.ifElse(R.is(String), R.toLower, R.identity), R.prop(colKey)))(data);
     return sortAscending ? sortedData : R.reverse(sortedData);
   }),
 

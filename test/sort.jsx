@@ -314,4 +314,33 @@ describe('sort', function() {
       expect(TU.scryRenderedDOMComponentsWithTag(trs[2], 'td')[0].getDOMNode().textContent).to.equal(data[2]['a'].toString());
     });
   });
+
+  describe('case insensitive sort', function() {
+    const data = [{a: 'aaa'}, {a: 'CBA'}, {a: 'ABC'}, {a: 'DEF'}];
+    const columns = [{a: 'A'}];
+
+    beforeEach(function() {
+      renderTree = TU.renderIntoDocument(
+        <SimpleSuperTable
+          data={data}
+          columns={columns}
+          primaryKeyGen={R.prop('a')}
+        />
+      );
+    });
+
+    afterEach(function() {
+      React.unmountComponentAtNode(document.body);
+    });
+
+    it('should sort column a in ascending order', function() {
+      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
+      const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
+      expect(trs.length).to.equal(4);
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[0], 'td')[0].getDOMNode().textContent).to.equal(data[0]['a']);
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[1], 'td')[0].getDOMNode().textContent).to.equal(data[2]['a']);
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[2], 'td')[0].getDOMNode().textContent).to.equal(data[1]['a']);
+      expect(TU.scryRenderedDOMComponentsWithTag(trs[3], 'td')[0].getDOMNode().textContent).to.equal(data[3]['a']);
+    });
+  })
 });
