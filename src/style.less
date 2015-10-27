@@ -22,7 +22,8 @@ div.simple-super-table {
       padding-left: 0.5em;
       padding-right: 0.5em;
       font-weight: bold;
-      flex: 0.7;
+      flex: 1;
+      flex-shrink: 0;
       white-space: pre-wrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -31,7 +32,8 @@ div.simple-super-table {
     div.filter-container {
       display: flex;
       flex-direction: row;
-      flex: 0.5;
+      flex: 1;
+      flex-shrink: 0;
       margin: auto;
       border-right: 1px solid @borderColor;
 
@@ -39,6 +41,7 @@ div.simple-super-table {
         display: flex;
         padding-left: 0.5em;
         padding-right: 0.5em;
+        flex-shrink: 0;
         fill: #aaa;
 
         * {
@@ -47,7 +50,8 @@ div.simple-super-table {
       }
 
       input {
-        flex: 0.3;
+        flex: 1;
+        flex-shrink: 0;
         border-radius: 0;
         padding: 0.5em;
         margin: auto;
