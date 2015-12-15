@@ -34,12 +34,12 @@ const columns = [
   },
 ];
 const columnWidths = {
-  orderDate: 100,
+  orderDate: 125,
   region: 100,
-  rep: 100,
+  rep: 150,
   item: 100,
-  units: 50,
-  unitCost: 50,
+  units: 100,
+  unitCost: 100,
   total: 300,
 };
 const primaryKeyGen = R.prop('orderDate');
