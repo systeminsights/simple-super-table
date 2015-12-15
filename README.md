@@ -48,8 +48,8 @@ columns can be nested to render spanned headers.
 ```js
 const columns = [
   {col1: 'Column 1'},
-  {col2: 'Column 2', sorter: <function>},
-  {col3: 'Something else', sorter: <function>},
+  {col2: 'Column 2'},
+  {col3: 'Something else'},
 ];
 
 const nestedColumns = [
