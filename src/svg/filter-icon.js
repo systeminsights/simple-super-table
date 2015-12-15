@@ -1,9 +1,8 @@
-import React from 'react';
-const T = React.PropTypes;
+const React = require('react');
 
 const FilterIcon = React.createClass({
   propTypes: {
-    size: T.number,
+    size: React.PropTypes.number,
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -28,4 +27,4 @@ const FilterIcon = React.createClass({
   },
 });
 
-export default FilterIcon;
+module.exports = FilterIcon;

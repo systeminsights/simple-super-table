@@ -1,12 +1,13 @@
 @headerBgColor: #f9fafb;
 @textHighlightColor: #f8f800;
-@borderColor: rgba(34,36,38,.1);
+@borderColor: rgba(34, 36, 38, .1);
 @inputFocusBorderColor: #aaaaaa;
 
 div.simple-super-table {
   display: flex;
   flex: 1;
   flex-direction: column;
+  overflow: hidden;
 
   div.top-bar {
     display: flex;
@@ -90,54 +91,92 @@ div.simple-super-table {
     display: flex;
     flex-direction: column;
     flex: 1;
-    overflow: auto;
+    overflow: hidden;
 
-    table {
+    .table {
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
       width: 100%;
       border-collapse: collapse;
       border-right: 1px solid @borderColor;
       border-bottom: 1px solid @borderColor;
+      overflow: hidden;
 
-      thead {
-        background: @headerBgColor;
-        user-select: none;
-        cursor: default;
+      .table-header {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        border-bottom: 1px solid #cccccc;
 
-        th {
+        .row {
+          display: flex;
+          flex-direction: row;
+          flex-shrink: 0;
+          background: @headerBgColor;
+          user-select: none;
+          cursor: default;
           border-top: 1px solid @borderColor;
-          border-left: 1px solid @borderColor;
-          padding: 0.5em;
 
-          .content {
+          .col {
             display: flex;
             flex-direction: row;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            border-left: 1px solid @borderColor;
+            margin: 0;
+            padding: 0.5em;
 
-            .header {
-              flex: 1;
+            &:last-child {
+              border-right: 1px solid @borderColor;
             }
 
-            .sort-icon-container {
-              flex-shrink: 0;
-              margin: auto;
+            .content {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+
+              .header {
+                font-size: 0.9em;
+                font-weight: 600;
+                margin: auto 0.5em auto 0;
+              }
+
+              .sort-icon-container {
+                width: 17px;
+                margin: auto;
+              }
             }
           }
         }
       }
 
-      tbody {
-        tr.row.active,
-        td.col.active {
+      .table-body {
+        overflow: auto;
+        div.row.active,
+        div.col.active {
           background-color: #e0e0e0;
-          box-shadow: 0 0 0 rgba(0,0,0,.87) inset;
+          box-shadow: 0 0 0 rgba(0, 0, 0, .87) inset;
         }
 
-        td {
-          padding: 0.5em;
+        div.row {
+          display: flex;
+          flex-direction: row;
+          flex-shrink: 0;
           border-top: 1px solid @borderColor;
-          border-left: 1px solid @borderColor;
         }
 
-        td.col {
+        div.col {
+          box-sizing: border-box;
+          flex-shrink: 0;
+          padding: 0.5em;
+          border-left: 1px solid @borderColor;
+
+          &:last-child {
+            border-right: 1px solid @borderColor;
+          }
+
           .filter-text-highlight {
             .highlight {
               box-sizing: border-box;
@@ -148,24 +187,27 @@ div.simple-super-table {
           }
         }
       }
-    }
 
-    div.message-container {
-      display: flex;
-      flex: 1;
-      flex-shrink: 0;
+      div.message-container {
+        display: flex;
+        flex: 1;
+        flex-shrink: 0;
 
-      h3.no-data-message,
-      h3.no-matching-data-message {
-        margin: auto;
+        h3.no-data-message,
+        h3.no-matching-data-message {
+          margin: auto;
+          text-align: center;
+          font-size: 0.95em;
+          color: #777777;
+        }
       }
     }
   }
 
   &.row-clickable {
-    table {
-      tbody {
-        tr.row:hover {
+    .table {
+      .table-body {
+        div.row:hover {
           background-color: rgba(0, 0, 0, .05);
         }
       }
@@ -173,9 +215,9 @@ div.simple-super-table {
   }
 
   &.col-clickable {
-    table {
-      tbody {
-        td.col:hover {
+    .table {
+      .table-body {
+        div.col:hover {
           background-color: rgba(0, 0, 0, .05);
         }
       }

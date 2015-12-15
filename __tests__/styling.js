@@ -1,9 +1,7 @@
-import React from 'react/addons';
+const React = require('react/addons');
 const TU = React.addons.TestUtils;
-import R from 'ramda';
-import SimpleSuperTable from '../src';
-
-import sampleData from '../fixtures/sample-data';
+const R = require('ramda');
+const {SimpleSuperTable} = require('../src');
 
 describe('styling', function() {
   const data = [
@@ -27,6 +25,7 @@ describe('styling', function() {
         <SimpleSuperTable
           data={data}
           columns={columns}
+          columnWidths={{a: 10, b: 10, c: 10}}
           primaryKeyGen={primaryKeyGen}
           title={title}
         />
@@ -53,9 +52,9 @@ describe('styling', function() {
     });
 
     it('should assign col and colKey to header column class', function() {
-      const thead = TU.findRenderedDOMComponentWithTag(renderTree, 'thead');
-      const tr = TU.findRenderedDOMComponentWithTag(thead, 'tr');
-      const ths = TU.scryRenderedDOMComponentsWithTag(tr, 'th');
+      const thead = TU.findRenderedDOMComponentWithClass(renderTree, 'table-header');
+      const tr = TU.findRenderedDOMComponentWithClass(thead, 'row');
+      const ths = TU.scryRenderedDOMComponentsWithClass(tr, 'col');
       expect(ths[0].getDOMNode().className).to.contain('col');
       expect(ths[0].getDOMNode().className).to.contain('a');
       expect(ths[1].getDOMNode().className).to.contain('col');
@@ -65,16 +64,16 @@ describe('styling', function() {
     });
 
     it('should assign row to body rows', function() {
-      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
-      const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
+      const tbody = TU.findRenderedDOMComponentWithClass(renderTree, 'table-body');
+      const trs = TU.scryRenderedDOMComponentsWithClass(tbody, 'row');
       expect(trs[0].getDOMNode().className).to.contain('row');
       expect(trs[1].getDOMNode().className).to.contain('row');
       expect(trs[2].getDOMNode().className).to.contain('row');
     });
 
     it('should assign col and colKey to body column class', function() {
-      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
-      const tds = TU.scryRenderedDOMComponentsWithTag(tbody, 'td');
+      const tbody = TU.findRenderedDOMComponentWithClass(renderTree, 'table-body');
+      const tds = TU.scryRenderedDOMComponentsWithClass(tbody, 'col');
       expect(tds[0].getDOMNode().className).to.contain('col');
       expect(tds[0].getDOMNode().className).to.contain('a');
       expect(tds[1].getDOMNode().className).to.contain('col');
@@ -91,6 +90,7 @@ describe('styling', function() {
           <SimpleSuperTable
             data={data}
             columns={columns}
+            columnWidths={{a: 10, b: 10, c: 10}}
             primaryKeyGen={primaryKeyGen}
             sortableColumns={['a', 'c']}
             defaultSortColumn={'a'}
@@ -104,8 +104,8 @@ describe('styling', function() {
       });
 
       it('should assign sorted class to column a', function() {
-        const thead = TU.findRenderedDOMComponentWithTag(renderTree, 'thead');
-        const ths = TU.scryRenderedDOMComponentsWithTag(thead, 'th');
+        const thead = TU.findRenderedDOMComponentWithClass(renderTree, 'table-header');
+        const ths = TU.scryRenderedDOMComponentsWithClass(thead, 'col');
         expect(ths[0].getDOMNode().className).to.contain('sorted');
         expect(ths[0].getDOMNode().className).to.contain('asc');
         expect(ths[1].getDOMNode().className).not.to.contain('sorted');
@@ -119,6 +119,7 @@ describe('styling', function() {
           <SimpleSuperTable
             data={data}
             columns={columns}
+            columnWidths={{a: 10, b: 10, c: 10}}
             primaryKeyGen={primaryKeyGen}
             sortableColumns={['a', 'c']}
             defaultSortColumn={'c'}
@@ -132,8 +133,8 @@ describe('styling', function() {
       });
 
       it('should assign sorted class to column c', function() {
-        const thead = TU.findRenderedDOMComponentWithTag(renderTree, 'thead');
-        const ths = TU.scryRenderedDOMComponentsWithTag(thead, 'th');
+        const thead = TU.findRenderedDOMComponentWithClass(renderTree, 'table-header');
+        const ths = TU.scryRenderedDOMComponentsWithClass(thead, 'col');
         expect(ths[0].getDOMNode().className).not.to.contain('sorted');
         expect(ths[1].getDOMNode().className).not.to.contain('sorted');
         expect(ths[2].getDOMNode().className).to.contain('sorted');
@@ -148,6 +149,7 @@ describe('styling', function() {
         <SimpleSuperTable
           data={data}
           columns={columns}
+          columnWidths={{a: 10, b: 10, c: 10}}
           primaryKeyGen={primaryKeyGen}
           onRowClick={R.identity}
         />
@@ -169,6 +171,7 @@ describe('styling', function() {
         <SimpleSuperTable
           data={data}
           columns={columns}
+          columnWidths={{a: 10, b: 10, c: 10}}
           primaryKeyGen={primaryKeyGen}
           onColumnClick={R.identity}
         />
@@ -196,6 +199,7 @@ describe('styling', function() {
         <SimpleSuperTable
           data={data}
           columns={columns}
+          columnWidths={{a: 10, b: 10, c: 10}}
           primaryKeyGen={primaryKeyGen}
           rowClassGetter={rowClassGetter}
         />
@@ -208,8 +212,8 @@ describe('styling', function() {
     });
 
     it('should add the result of invocation to row class', function() {
-      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
-      const trs = TU.scryRenderedDOMComponentsWithTag(tbody, 'tr');
+      const tbody = TU.findRenderedDOMComponentWithClass(renderTree, 'table-body');
+      const trs = TU.scryRenderedDOMComponentsWithClass(tbody, 'row');
       expect(rowClassGetter).to.have.been.calledWith(data[0]);
       expect(rowClassGetter).to.have.been.calledWith(data[1]);
       expect(rowClassGetter).to.have.been.calledWith(data[2]);
@@ -227,6 +231,7 @@ describe('styling', function() {
         <SimpleSuperTable
           data={data.slice(0, 1)}
           columns={columns}
+          columnWidths={{a: 10, b: 10, c: 10}}
           primaryKeyGen={primaryKeyGen}
           columnClassGetter={columnClassGetter}
         />
@@ -239,9 +244,9 @@ describe('styling', function() {
     });
 
     it('should add the result of invocation to column class', function() {
-      const tbody = TU.findRenderedDOMComponentWithTag(renderTree, 'tbody');
-      const tr = TU.findRenderedDOMComponentWithTag(tbody, 'tr');
-      const tds = TU.scryRenderedDOMComponentsWithTag(tr, 'td');
+      const tbody = TU.findRenderedDOMComponentWithClass(renderTree, 'table-body');
+      const tr = TU.findRenderedDOMComponentWithClass(tbody, 'row');
+      const tds = TU.scryRenderedDOMComponentsWithClass(tr, 'col');
       expect(columnClassGetter).to.have.been.calledWith(data[0]['a'], data[0], 'a');
       expect(columnClassGetter).to.have.been.calledWith(data[0]['b'], data[0], 'b');
       expect(columnClassGetter).to.have.been.calledWith(data[0]['c'], data[0], 'c');

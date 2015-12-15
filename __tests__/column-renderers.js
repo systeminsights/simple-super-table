@@ -1,7 +1,7 @@
-import React from 'react/addons';
+const React = require('react/addons');
 const TU = React.addons.TestUtils;
-import R from 'ramda';
-import {columnRenderers} from '../src';
+const R = require('ramda');
+const {ColumnRenderers} = require('../src');
 
 describe('column renderers', function() {
   describe('filterTextHighlightRenderer', function() {
@@ -12,7 +12,7 @@ describe('column renderers', function() {
     });
 
     it('should not highlight when filter text is empty', function() {
-      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['a'], rowData, 'a', ''));
+      const renderTree = TU.renderIntoDocument(ColumnRenderers.filterTextHighlightRenderer(rowData['a'], rowData, 'a', ''));
       const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
       expect(spans.length).to.equal(1);
       expect(spans[0].getDOMNode().textContent).to.equal(rowData['a']);
@@ -20,7 +20,7 @@ describe('column renderers', function() {
     });
 
     it('should create a highlight span for each match', function() {
-      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['a'], rowData, 'a', 'a'));
+      const renderTree = TU.renderIntoDocument(ColumnRenderers.filterTextHighlightRenderer(rowData['a'], rowData, 'a', 'a'));
       const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
       expect(spans.length).to.equal(5);
       expect(spans[0].getDOMNode().textContent).to.equal(rowData['a']);
@@ -36,7 +36,7 @@ describe('column renderers', function() {
     });
 
     it('should treat numerical match as string match', function() {
-      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['c'], rowData, 'c', 3));
+      const renderTree = TU.renderIntoDocument(ColumnRenderers.filterTextHighlightRenderer(rowData['c'], rowData, 'c', 3));
       const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
       expect(spans.length).to.equal(3);
       expect(spans[0].getDOMNode().textContent).to.equal(rowData['c'].toString());
@@ -48,21 +48,21 @@ describe('column renderers', function() {
     });
 
     it('should render "-" for null data', function() {
-      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['d'], rowData, 'd', ''));
+      const renderTree = TU.renderIntoDocument(ColumnRenderers.filterTextHighlightRenderer(rowData['d'], rowData, 'd', ''));
       const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
       expect(spans.length).to.equal(1);
       expect(spans[0].getDOMNode().textContent).to.equal('-');
     });
 
     it('should render "-" for empty data', function() {
-      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['e'], rowData, 'e', ''));
+      const renderTree = TU.renderIntoDocument(ColumnRenderers.filterTextHighlightRenderer(rowData['e'], rowData, 'e', ''));
       const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
       expect(spans.length).to.equal(1);
       expect(spans[0].getDOMNode().textContent).to.equal('-');
     });
 
     it('should render "-" for undefined data', function() {
-      const renderTree = TU.renderIntoDocument(columnRenderers.filterTextHighlightRenderer(rowData['f'], rowData, 'f', ''));
+      const renderTree = TU.renderIntoDocument(ColumnRenderers.filterTextHighlightRenderer(rowData['f'], rowData, 'f', ''));
       const spans = TU.scryRenderedDOMComponentsWithTag(renderTree, 'span');
       expect(spans.length).to.equal(1);
       expect(spans[0].getDOMNode().textContent).to.equal('-');
@@ -77,7 +77,7 @@ describe('column renderers', function() {
     });
 
     it('should return an svg element', function() {
-      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), R.identity);
+      const barRenderer = ColumnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), R.identity);
       const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
       const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
       expect(svg).to.be.defined;
@@ -86,7 +86,7 @@ describe('column renderers', function() {
     });
 
     it('should render a bar inside the svg element', function() {
-      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), R.identity);
+      const barRenderer = ColumnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), R.identity);
       const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
       const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
       const rect = TU.findRenderedDOMComponentWithTag(renderTree, 'rect');
@@ -97,7 +97,7 @@ describe('column renderers', function() {
     });
 
     it('should render a text element inside the svg element', function() {
-      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), R.identity);
+      const barRenderer = ColumnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), R.identity);
       const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
       const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
       const text = TU.findRenderedDOMComponentWithTag(renderTree, 'text');
@@ -106,7 +106,7 @@ describe('column renderers', function() {
     });
 
     it('should render a text element inside the svg element using formatter', function() {
-      const barRenderer = columnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), (colData) => 'xyz');
+      const barRenderer = ColumnRenderers.barRenderer(0, 100, 100, 20, R.always('#cccccc'), (colData) => 'xyz');
       const renderTree = TU.renderIntoDocument(barRenderer(rowData['c'], rowData, 'c', ''));
       const svg = TU.findRenderedDOMComponentWithTag(renderTree, 'svg');
       const text = TU.findRenderedDOMComponentWithTag(renderTree, 'text');

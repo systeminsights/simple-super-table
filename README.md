@@ -48,8 +48,8 @@ columns can be nested to render spanned headers.
 ```js
 const columns = [
   {col1: 'Column 1'},
-  {col2: 'Column 2', sorter: <function>},
-  {col3: 'Something else', sorter: <function>},
+  {col2: 'Column 2'},
+  {col3: 'Something else'},
 ];
 
 const nestedColumns = [
@@ -79,6 +79,18 @@ same syntax as 'columns' prop without nested headers. Defaults to columns.
 const primaryKeyGen = function primaryKeyGen(rowData) {
   return rowData['col1'];
 };
+```
+
+### columnWidths
+
+**Required**, Key-Value pairs to specify widths. Widths are absolute point numbers.
+
+```js
+const columnWidths = {
+  col1: 100,
+  col2: 250,
+  col3: 500,
+}
 ```
 
 ### columnSorters

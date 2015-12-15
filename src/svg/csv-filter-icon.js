@@ -1,12 +1,10 @@
-import React from 'react';
-const T = React.PropTypes;
-
-import CsvIcon from './csv-icon';
-import FilterIcon from './filter-icon';
+const React = require('react');
+const CsvIcon = require('./csv-icon');
+const FilterIcon = require('./filter-icon');
 
 const CsvFilterIcon = React.createClass({
   propTypes: {
-    size: T.number,
+    size: React.PropTypes.number,
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -34,4 +32,4 @@ const CsvFilterIcon = React.createClass({
   },
 });
 
-export default CsvFilterIcon;
+module.exports = CsvFilterIcon;

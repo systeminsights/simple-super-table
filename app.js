@@ -1,13 +1,13 @@
-/*eslint-disable no-undef */
-import './src/style.less';
+require('./src/style.less');
 
-import React from 'react';
-import R from 'ramda';
-import moment from 'moment';
+const React = require('react');
+const R = require('ramda');
+const moment = require('moment');
 
-import SampleData from './fixtures/sample-data.json';
+const SampleData = require('./fixtures/sample-data.json');
+const {SimpleSuperTable, ColumnRenderers} = require('./src');
 
-const dateSorter = function(data, colKey) {
+const dateSorter = function dateSorter(data, colKey) {
   return R.sort((a, b) => {
     return moment(R.prop(colKey, a), 'M/D/YY').valueOf() - moment(R.prop(colKey, b), 'M/D/YY').valueOf();
   })(data);
@@ -38,13 +38,23 @@ const columnSorters = {
   orderDate: dateSorter,
 };
 const columnRenderers = {
-  total: SimpleSuperTable.columnRenderers.barRenderer(0, 2000, 200, 20, R.always('#0000cc'), (_) => _),
+  total: ColumnRenderers.barRenderer(0, 2000, 200, 20, R.always('#0000cc'), (_) => _),
+};
+const columnWidths = {
+  orderDate: 125,
+  region: 125,
+  rep: 300,
+  item: 125,
+  units: 125,
+  unitCost: 125,
+  total: 300,
 };
 
 React.render(
-  <SimpleSuperTable.default
+  <SimpleSuperTable
     data={data}
     columns={columns}
+    columnWidths={columnWidths}
     primaryKeyGen={primaryKeyGen}
     title={'Sales in 2015'}
     columnSorters={columnSorters}
