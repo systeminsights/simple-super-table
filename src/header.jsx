@@ -36,56 +36,28 @@ const Header = React.createClass({
   },
 
   render: function render() {
-    const {spannedColumns, columns} = extractSpannedColumns(this.props.columns);
-
-    const rowForSpannedColumns = R.ifElse(
-      R.isEmpty,
-      () => null,
-      () => {
-        const paddedSpannedColumns = R.reduce((acc, next) => {
-          if (R.isEmpty(acc) && next.position !== 0) {
-            return R.concat([{
-              label: '',
-              position: 0,
-              spanLength: next.position,
-            }, next], acc);
-          } else if (R.isEmpty(acc) && next.position === 0) {
-            return R.append(next, acc);
-          } else if (R.last(acc).position + R.last(acc).spanLength !== next.position) {
-            return R.concat(acc, [{
-              label: '',
-              position: R.last(acc).position + R.last(acc).spanLength,
-              spanLength: next.position - (R.last(acc).position + R.last(acc).spanLength),
-            }, next]);
-          }
-
-          return R.append(next, acc);
-        })([], spannedColumns);
-
-        const rightPadding = R.ifElse(
-          R.lt(R.__, columns.length),
-          (len) => [{position: len, spanLength: columns.length - len}],
-          () => []
-        )(R.last(paddedSpannedColumns).position + R.last(paddedSpannedColumns).spanLength);
-
-        return (
-          <div className="row">
-            {R.map((c) => {
-              return (
-                <div className="col"
-                  key={c.position}
-                  colSpan={c.spanLength}
-                >{c.label}</div>
-              );
-            })(paddedSpannedColumns.concat(rightPadding))}
-          </div>
-        );
-      }
-    )(spannedColumns);
+    const {columns} = extractSpannedColumns(this.props.columns);
 
     return (
       <div className="table-header">
-        {rowForSpannedColumns}
+        <div className="row">
+          {R.map((c) => {
+            const width = R.has('span', c) ? R.compose(
+              R.reduce(R.add)(0),
+              R.map((keys) => this.props.columnWidths[R.head(keys)]),
+              R.map(R.keys))(c.columns) : this.props.columnWidths[R.head(R.keys(c))];
+
+            return (
+              <div key={R.has('span', c) ? c.span : R.head(R.keys(c))}
+                   className="col"
+                   style={{minWidth: width, maxWidth: width}}>
+                <div className="content">
+                  <div className="header">{R.has('span', c) ? c.span : ''}</div>
+                </div>
+              </div>
+            );
+          })(this.props.columns)}
+        </div>
         <div className="row">
           {R.map(renderHelpers.renderHeader(
             this.props.columnWidths,

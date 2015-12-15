@@ -117,6 +117,7 @@ div.simple-super-table {
         .row {
           display: flex;
           flex-direction: row;
+          flex-shrink: 0;
           background: @headerBgColor;
           user-select: none;
           cursor: default;
@@ -199,16 +200,20 @@ div.simple-super-table {
 
   &.row-clickable {
     .table {
-      div.row:hover {
-        background-color: rgba(0, 0, 0, .05);
+      .table-body {
+        div.row:hover {
+          background-color: rgba(0, 0, 0, .05);
+        }
       }
     }
   }
 
   &.col-clickable {
     .table {
-      div.col:hover {
-        background-color: rgba(0, 0, 0, .05);
+      .table-body {
+        div.col:hover {
+          background-color: rgba(0, 0, 0, .05);
+        }
       }
     }
   }
