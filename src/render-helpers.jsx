@@ -5,7 +5,7 @@ import SortIcon from './svg/sort-icon';
 
 const renderHelpers = {
   // :: fn -> [String] -> String -> Bool -> {k : v} -> ReactElement
-  renderHeader: R.curry((onClickHandler, sortableColKeys, sortColKey, sortAscending, column) => {
+  renderHeader: R.curry((columnWidths, onClickHandler, sortableColKeys, sortColKey, sortAscending, column) => {
     const colKey = R.head(R.keys(column));
     const sortable = R.contains(colKey, sortableColKeys) ? 'sortable' : '';
     const sorted = colKey === sortColKey ? `sorted ${sortAscending ? 'asc' : 'desc'}` : '';
@@ -14,6 +14,7 @@ const renderHelpers = {
     return (
       <div
         key={colKey}
+        style={{minWidth: columnWidths[colKey], maxWidth: columnWidths[colKey]}}
         className={`col ${colKey} ${sortable} ${sorted}`}
         onClick={onClickHandler}
         data-col-key={colKey}

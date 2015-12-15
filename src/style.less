@@ -108,29 +108,41 @@ div.simple-super-table {
         overflow: auto;
       }
 
-      .header {
-        background: @headerBgColor;
-        user-select: none;
-        cursor: default;
+      .table-header {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        border-bottom: 1px solid #cccccc;
 
-        .col {
-          box-sizing: border-box;
-          border-top: 1px solid @borderColor;
-          border-left: 1px solid @borderColor;
-          margin: 0;
-          padding: 0.5em;
+        .header {
+          display: flex;
+          flex-direction: row;
+          background: @headerBgColor;
+          user-select: none;
+          cursor: default;
 
-          .content {
+          .col {
             display: flex;
             flex-direction: row;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            border-top: 1px solid @borderColor;
+            border-left: 1px solid @borderColor;
+            margin: 0;
+            padding: 0.5em;
 
-            .header {
-              flex: 1;
-            }
+            .content {
+              display: flex;
+              flex-direction: row;
 
-            .sort-icon-container {
-              flex-shrink: 0;
-              margin: auto;
+              .header {
+                margin-right: 0.5em;
+              }
+
+              .sort-icon-container {
+                flex-shrink: 0;
+                margin: auto;
+              }
             }
           }
         }

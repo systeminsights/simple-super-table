@@ -157,13 +157,14 @@ const SimpleSuperTable = React.createClass({
         </div>
         <div className="table-container">
           <div className="table">
-            {/*<Header
+            <Header
               columns={this.props.columns}
+              columnWidths={this.props.columnWidths}
               sortableColumns={sortableColumns}
               sortColKey={this.state.sortColKey}
               sortAscending={this.state.sortAscending}
               onHeaderClick={this.handleHeaderClick}
-            />*/}
+            />
             <Body
               data={sortedFilteredData}
               colKeys={colKeys}

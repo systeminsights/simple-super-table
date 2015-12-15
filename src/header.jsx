@@ -28,6 +28,7 @@ const extractSpannedColumns = function extractSpannedColumns(columnsWithSpans) {
 const Header = React.createClass({
   propTypes: {
     columns: T.array.isRequired,
+    columnWidths: T.object.isRequired,
     sortableColumns: T.array.isRequired,
     sortColKey: T.string.isRequired,
     sortAscending: T.bool.isRequired,
@@ -68,32 +69,33 @@ const Header = React.createClass({
         )(R.last(paddedSpannedColumns).position + R.last(paddedSpannedColumns).spanLength);
 
         return (
-          <tr>
+          <div className="row">
             {R.map((c) => {
               return (
-                <th
+                <div className="col"
                   key={c.position}
                   colSpan={c.spanLength}
-                >{c.label}</th>
+                >{c.label}</div>
               );
             })(paddedSpannedColumns.concat(rightPadding))}
-          </tr>
+          </div>
         );
       }
     )(spannedColumns);
 
     return (
-      <thead>
-      {rowForSpannedColumns}
-      <tr>
-        {R.map(renderHelpers.renderHeader(
-          this.props.onHeaderClick,
-          this.props.sortableColumns,
-          this.props.sortColKey,
-          this.props.sortAscending
-        ))(columns)}
-      </tr>
-      </thead>
+      <div className="table-header">
+        {rowForSpannedColumns}
+        <div className="row">
+          {R.map(renderHelpers.renderHeader(
+            this.props.columnWidths,
+            this.props.onHeaderClick,
+            this.props.sortableColumns,
+            this.props.sortColKey,
+            this.props.sortAscending
+          ))(columns)}
+        </div>
+      </div>
     );
   },
 });
