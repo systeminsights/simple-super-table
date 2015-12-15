@@ -1,5 +1,4 @@
 import React from 'react/addons';
-const T = React.PropTypes;
 const {LinkedStateMixin} = React.addons;
 import R from 'ramda';
 
@@ -15,22 +14,23 @@ import Body from './body';
 // TODO: use ES6 class syntax when an alternative for mixins is available.
 const SimpleSuperTable = React.createClass({
   propTypes: {
-    data: T.array.isRequired,
-    columns: T.array.isRequired,
-    primaryKeyGen: T.func.isRequired,
-    columnsForDownload: T.array,
-    filterableColumns: T.array,
-    defaultSortColumn: T.string,
-    defaultSortAscending: T.bool,
-    sortableColumns: T.array,
-    onRowClick: T.func,
-    onColumnClick: T.func,
-    rowClassGetter: T.func,
-    columnClassGetter: T.func,
-    columnsSorters: T.object,
-    columnRenderers: T.object,
-    title: T.string,
-    messages: T.object,
+    data: React.PropTypes.array.isRequired,
+    columns: React.PropTypes.array.isRequired,
+    columnWidths: React.PropTypes.object.isRequired,
+    primaryKeyGen: React.PropTypes.func.isRequired,
+    columnsForDownload: React.PropTypes.array,
+    filterableColumns: React.PropTypes.array,
+    defaultSortColumn: React.PropTypes.string,
+    defaultSortAscending: React.PropTypes.bool,
+    sortableColumns: React.PropTypes.array,
+    onRowClick: React.PropTypes.func,
+    onColumnClick: React.PropTypes.func,
+    rowClassGetter: React.PropTypes.func,
+    columnClassGetter: React.PropTypes.func,
+    columnsSorters: React.PropTypes.object,
+    columnRenderers: React.PropTypes.object,
+    title: React.PropTypes.string,
+    messages: React.PropTypes.object,
   },
 
   mixins: [LinkedStateMixin],
@@ -156,18 +156,19 @@ const SimpleSuperTable = React.createClass({
           </div>
         </div>
         <div className="table-container">
-          <table>
-            <Header
+          <div className="table">
+            {/*<Header
               columns={this.props.columns}
               sortableColumns={sortableColumns}
               sortColKey={this.state.sortColKey}
               sortAscending={this.state.sortAscending}
               onHeaderClick={this.handleHeaderClick}
-            />
+            />*/}
             <Body
               data={sortedFilteredData}
               colKeys={colKeys}
               primaryKeyGen={this.props.primaryKeyGen}
+              columnWidths={this.props.columnWidths}
               filterText={this.state.filterText}
               onRowClick={this.handleRowClick}
               onColumnClick={this.handleColumnClick}
@@ -175,7 +176,7 @@ const SimpleSuperTable = React.createClass({
               rowClassGetter={this.props.rowClassGetter}
               columnClassGetter={this.props.columnClassGetter}
             />
-          </table>
+          </div>
           {messageContainer}
         </div>
       </div>
@@ -193,6 +194,7 @@ const SimpleSuperTable = React.createClass({
   },
 
   handleRowClick: function handleRowClick(e) {
+    console.log('handling row click in sst.js');
     if (!R.isNil(this.props.onRowClick)) {
       const primaryKey = e.currentTarget.getAttribute('data-primary-key');
       const foundRow = R.find((d) => R.equals(primaryKey, this.props.primaryKeyGen(d).toString()))(this.props.data);

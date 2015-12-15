@@ -81,6 +81,18 @@ const primaryKeyGen = function primaryKeyGen(rowData) {
 };
 ```
 
+### columnWidths
+
+**Required**, Key-Value pairs to specify widths. Widths are absolute point numbers.
+
+```js
+const columnWidths = {
+  col1: 100,
+  col2: 250,
+  col3: 500,
+}
+```
+
 ### columnSorters
 
 Optional, object. Custom sorting functions for columns. Expects the key to be

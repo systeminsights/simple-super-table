@@ -33,6 +33,15 @@ const columns = [
     ],
   },
 ];
+const columnWidths = {
+  orderDate: 100,
+  region: 100,
+  rep: 100,
+  item: 100,
+  units: 50,
+  unitCost: 50,
+  total: 300,
+};
 const primaryKeyGen = R.prop('orderDate');
 const columnSorters = {
   orderDate: dateSorter,
@@ -45,10 +54,12 @@ React.render(
   <SimpleSuperTable.default
     data={data}
     columns={columns}
+    columnWidths={columnWidths}
     primaryKeyGen={primaryKeyGen}
     title={'Sales in 2015'}
     columnSorters={columnSorters}
     columnRenderers={columnRenderers}
+    onRowClick={(rowData) => console.log('row was clicked', rowData)}
   />,
   document.getElementById('component')
 );

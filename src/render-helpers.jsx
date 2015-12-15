@@ -12,7 +12,7 @@ const renderHelpers = {
     const sortIcon = sortable ? <SortIcon size={12.5} sorted={colKey === sortColKey} ascending={sortAscending} /> : null;
 
     return (
-      <th
+      <div
         key={colKey}
         className={`col ${colKey} ${sortable} ${sorted}`}
         onClick={onClickHandler}
@@ -22,39 +22,44 @@ const renderHelpers = {
           <div className="header">{column[colKey]}</div>
           <div className="sort-icon-container">{sortIcon}</div>
         </div>
-      </th>
+      </div>
     );
   }),
 
   // :: Object -> String -> fn -> String -> fn -> {k: fn} -> filterText -> ReactElement
-  renderCol: R.curry((rowData, primaryKey, onColumnClickHandler, columnClassGetter, columnRenderers, filterText, colKey) => {
+  renderCol: R.curry((rowData, columnWidths, primaryKey, onColumnClickHandler, columnClassGetter, columnRenderers, filterText, colKey) => {
     return (
-      <td
+      <div
         key={colKey}
+        style={{minWidth: columnWidths[colKey], maxWidth: columnWidths[colKey]}}
         className={`col ${colKey} ${columnClassGetter(rowData[colKey], rowData, colKey)}`}
         onClick={onColumnClickHandler}
         data-col-key={colKey}
         data-primary-key={primaryKey}
-        >{R.has(colKey, columnRenderers) ? columnRenderers[colKey](rowData[colKey], rowData, colKey, filterText) : R.ifElse(R.anyPass([R.isNil, R.isEmpty]), R.always('-'), (_) => _)(rowData[colKey])}</td>
+        >{R.has(colKey, columnRenderers) ? columnRenderers[colKey](rowData[colKey], rowData, colKey, filterText) : R.ifElse(R.anyPass([R.isNil, R.isEmpty]), R.always('-'), (_) => _)(rowData[colKey])}</div>
     );
   }),
 
   // :: ((Object) -> String) -> [String] -> fn -> fn -> fn -> fn -> {k: fn} -> Object -> String -> ReactElement
-  renderRow: R.curry((primaryKeyGen, colKeys, onRowClickHandler, onColumnClickHandler, rowClassGetter, columnClassGetter, columnRenderers, filterText, rowData) => {
+  renderRow: R.curry((primaryKeyGen, colKeys, columnWidths, onRowClickHandler, onColumnClickHandler, rowClassGetter, columnClassGetter, columnRenderers, filterText, rowData) => {
+    const totalWidth = R.reduce(R.add)(0)(R.values(columnWidths));
+
     return (
-      <tr
+      <div
         key={primaryKeyGen(rowData)}
         className={`row ${rowClassGetter(rowData)}`}
+        style={{minWidth: totalWidth}}
         data-primary-key={primaryKeyGen(rowData)}
-        onClick={onRowClickHandler}
+        onClick={() => console.log('row click')}
       >{R.map(renderHelpers.renderCol(
         rowData,
+        columnWidths,
         primaryKeyGen(rowData),
         onColumnClickHandler,
         columnClassGetter,
         columnRenderers,
         filterText
-      ))(colKeys)}</tr>
+      ))(colKeys)}</div>
     );
   }),
 };
