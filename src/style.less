@@ -104,10 +104,6 @@ div.simple-super-table {
       border-bottom: 1px solid @borderColor;
       overflow: hidden;
 
-      .table-body {
-        overflow: auto;
-      }
-
       .table-header {
         display: flex;
         flex-direction: column;
@@ -152,48 +148,51 @@ div.simple-super-table {
         }
       }
 
-      div.row.active,
-      div.col.active {
-        background-color: #e0e0e0;
-        box-shadow: 0 0 0 rgba(0, 0, 0, .87) inset;
-      }
-
-      div.row {
-        display: flex;
-        flex-direction: row;
-        flex-shrink: 0;
-        border-top: 1px solid @borderColor;
-      }
-
-      div.col {
-        box-sizing: border-box;
-        flex-shrink: 0;
-        padding: 0.5em;
-        border-left: 1px solid @borderColor;
-
-        &:last-child {
-          border-right: 1px solid @borderColor;
+      .table-body {
+        overflow: auto;
+        div.row.active,
+        div.col.active {
+          background-color: #e0e0e0;
+          box-shadow: 0 0 0 rgba(0, 0, 0, .87) inset;
         }
 
-        .filter-text-highlight {
-          .highlight {
-            box-sizing: border-box;
-            background-color: @textHighlightColor;
-            border-radius: 3px;
-            border: 1px solid @borderColor;
+        div.row {
+          display: flex;
+          flex-direction: row;
+          flex-shrink: 0;
+          border-top: 1px solid @borderColor;
+        }
+
+        div.col {
+          box-sizing: border-box;
+          flex-shrink: 0;
+          padding: 0.5em;
+          border-left: 1px solid @borderColor;
+
+          &:last-child {
+            border-right: 1px solid @borderColor;
+          }
+
+          .filter-text-highlight {
+            .highlight {
+              box-sizing: border-box;
+              background-color: @textHighlightColor;
+              border-radius: 3px;
+              border: 1px solid @borderColor;
+            }
           }
         }
       }
-    }
 
-    div.message-container {
-      display: flex;
-      flex: 1;
-      flex-shrink: 0;
+      div.message-container {
+        display: flex;
+        flex: 1;
+        flex-shrink: 0;
 
-      h3.no-data-message,
-      h3.no-matching-data-message {
-        margin: auto;
+        h3.no-data-message,
+        h3.no-matching-data-message {
+          margin: auto;
+        }
       }
     }
   }

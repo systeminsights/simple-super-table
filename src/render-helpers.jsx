@@ -37,7 +37,9 @@ const renderHelpers = {
         onClick={onColumnClickHandler}
         data-col-key={colKey}
         data-primary-key={primaryKey}
-        >{R.has(colKey, columnRenderers) ? columnRenderers[colKey](rowData[colKey], rowData, colKey, filterText) : R.ifElse(R.anyPass([R.isNil, R.isEmpty]), R.always('-'), (_) => _)(rowData[colKey])}</div>
+        >
+          <div className="content">{R.has(colKey, columnRenderers) ? columnRenderers[colKey](rowData[colKey], rowData, colKey, filterText) : R.ifElse(R.anyPass([R.isNil, R.isEmpty]), R.always('-'), (_) => _)(rowData[colKey])}</div>
+      </div>
     );
   }),
 
