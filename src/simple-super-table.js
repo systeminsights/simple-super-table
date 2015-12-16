@@ -1,4 +1,4 @@
-//import React from 'react/addons';
+const React = require('react/addons');
 const {LinkedStateMixin} = React.addons;
 import R from 'ramda';
 
@@ -11,7 +11,6 @@ import {filterTextHighlightRenderer} from './column-renderers';
 import Header from './header';
 import Body from './body';
 
-// TODO: use ES6 class syntax when an alternative for mixins is available.
 const SimpleSuperTable = React.createClass({
   propTypes: {
     data: React.PropTypes.array.isRequired,
@@ -254,4 +253,4 @@ const SimpleSuperTable = React.createClass({
   },
 });
 
-export default SimpleSuperTable;
+module.exports = SimpleSuperTable;

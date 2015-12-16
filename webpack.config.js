@@ -1,118 +1,80 @@
-/*!
- * React Component Starter Kit
- * https://github.com/kriasoft/react-component-starter
- * Copyright (c) KriaSoft, LLC. All rights reserved. See LICENSE.txt
- */
+const packageJSON = require('./package.json');
 
-var webpack = require('webpack');
-var argv = require('minimist')(process.argv.slice(2));
+const path = require('path');
+const webpack = require('webpack');
+const argv = require('minimist')(process.argv.slice(2));
 
-var DEBUG = !argv.release;
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const LessPluginAutoprefix = require('less-plugin-autoprefix');
+const LessPluginCleanCSS = require('less-plugin-clean-css');
 
-var AUTOPREFIXER_LOADER = 'autoprefixer-loader?{browsers:[' +
-  '"Android 2.3", "Android >= 4", "Chrome >= 20", "Firefox >= 24", ' +
-  '"Explorer >= 8", "iOS >= 6", "Opera >= 12", "Safari >= 6"]}';
+const DEBUG = !argv.release;
 
-var GLOBALS = {
+const GLOBALS = {
   'process.env.NODE_ENV': DEBUG ? '"development"' : '"production"',
-  '__DEV__': DEBUG
+  '__DEV__': DEBUG,
 };
 
-var entries = {
-  'simple-super-table': './src'
-};
+const plugins = DEBUG ? [
+  new webpack.DefinePlugin(GLOBALS),
+  new webpack.optimize.OccurenceOrderPlugin(),
+  new webpack.HotModuleReplacementPlugin(),
+  new webpack.WatchIgnorePlugin(excludePaths),
+] : [
+  new webpack.DefinePlugin(GLOBALS),
+  new webpack.optimize.OccurenceOrderPlugin(),
+  new webpack.optimize.UglifyJsPlugin(),
+  new ExtractTextPlugin('style.css'),
+];
 
-if (DEBUG) {
-  entries['app'] = './app.js'
-}
+const lessPlugins = DEBUG ? [
+  new LessPluginAutoprefix({browsers: ['last 2 versions']}),
+] : [
+  new LessPluginAutoprefix({browsers: ['last 2 versions']}),
+  new LessPluginCleanCSS({advanced: true}),
+];
 
-var config = {
-  entry: entries,
-  output: {
-    library: 'SimpleSuperTable',
-    libraryTarget: 'umd',
-    path: './dist',
-    filename: DEBUG ? '[name].js' : '[name].min.js'
-  },
+console.log('Webpack DEBUG: ', DEBUG);
 
-  externals: {
-    react: {
-      root: 'React',
-      commonjs: 'react',
-      commonjs2: 'react',
-      amd: 'react'
-    }
-  },
-
-  cache: DEBUG,
+module.exports = {
   debug: DEBUG,
-  devtool: DEBUG ? '#inline-source-map' : false,
-
+  devtool: DEBUG ? 'eval' : false,
   stats: {
     colors: true,
-    reasons: DEBUG
+    reasons: DEBUG,
   },
-
-  plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.DefinePlugin(GLOBALS)
-  ].concat(DEBUG ? [] : [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
-    new webpack.optimize.AggressiveMergingPlugin()
-  ]),
-
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
   },
-
+  entry: './src/simple-super-table.js',
+  output: {
+    library: true,
+    libraryTarget: 'umd',
+    filename: './dist/dist.js',
+  },
+  plugins: plugins,
+  resolveLoader: {
+    alias: {
+      'copy-index': 'file-loader?name=[path][name].[ext]&context=./app',
+    },
+  },
   module: {
-    preLoaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader'
-      }
-    ],
-
-    loaders: [
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader!' + AUTOPREFIXER_LOADER
-      },
-      {
-        test: /\.less$/,
-        loader: 'style-loader!css-loader!' + AUTOPREFIXER_LOADER +
-                '!less-loader'
-      },
-      {
-        test: /\.gif/,
-        loader: 'url-loader?limit=10000&mimetype=image/gif'
-      },
-      {
-        test: /\.jpg/,
-        loader: 'url-loader?limit=10000&mimetype=image/jpg'
-      },
-      {
-        test: /\.png/,
-        loader: 'url-loader?limit=10000&mimetype=image/png'
-      },
-      {
-        test: /\.svg/,
-        loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
-      },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      },
-      {
-        test: /\.json/,
-        exclude: /node_modules/,
-        loader: 'json-loader'
-      }
-    ]
-  }
+    loaders: [{
+      test: /\.(js|jsx)$/,
+      loader: 'babel',
+      exclude: [/node_modules/],
+    }, {
+      test: /\.less$/,
+      loader: DEBUG ? 'style!css!less' : ExtractTextPlugin.extract('css!less'),
+    }, {
+      test: /\.css$/,
+      loader: DEBUG ? 'style!css' : ExtractTextPlugin.extract('css'),
+    }, {
+      test: /\.json$/,
+      loader: 'json',
+    }],
+  },
+  lessLoader: {
+    lessPlugins: lessPlugins,
+  },
 };
-
-module.exports = config;

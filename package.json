@@ -1,6 +1,6 @@
 {
   "name": "simple-super-table",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "React component for rendering low volume data tables (~500). Provides search, sort and csv export for free.",
   "keywords": [
     "react",
@@ -9,20 +9,17 @@
   "repository": "https://github.com/santhosbaala/simple-super-table",
   "license": "MIT",
   "author": "System Insights Inc.",
-  "main": "./dist/simple-super-table.min.js",
+  "main": "./dist/dist.js",
   "scripts": {
-    "build": "webpack --watch",
-    "build-dist": "NODE_ENV=development npm test && NODE_ENV=production webpack --release",
-    "serve": "browser-sync start --server --files \"index.html,dist/**\"",
-    "start": "NODE_ENV=development parallelshell \"npm run build\" \"npm run serve\"",
-    "test": "NODE_ENV=development ./node_modules/.bin/mocha test"
+    "start": "",
+    "test": "NODE_ENV=development && ./node_modules/.bin/mocha --compilers js:babel/register,jsx:babel/register --require ./mocha-setup --recursive ./__tests__",
+    "build": "NODE_ENV=production && ./node_modules/.bin/webpack --config ./webpack.config.js --release"
   },
   "dependencies": {
     "d3-scale": "^0.1.1",
     "json2csv": "^2.8.2",
     "moment": "^2.10.6",
-    "ramda": "^0.15.1",
-    "react": "^0.13.3"
+    "ramda": "^0.15.1"
   },
   "devDependencies": {
     "autoprefixer-core": "^5.1.11",
@@ -33,27 +30,33 @@
     "babel-loader": "^5.0.0",
     "browser-sync": "^2.7.1",
     "chai": "^3.0.0",
+    "chai-as-promised": "^5.1.0",
     "css-loader": "^0.12.0",
     "del": "^1.1.1",
     "eslint": "^0.20.0",
     "eslint-loader": "^0.11.1",
     "eslint-plugin-react": "^2.2.0",
+    "extract-text-webpack-plugin": "^0.9.1",
     "jquery": "^2.1.4",
     "jsdom": "^5.6.0",
-    "json-loader": "^0.5.2",
+    "json-loader": "^0.5.4",
     "less": "^2.5.0",
     "less-loader": "^2.2.0",
+    "less-plugin-autoprefix": "^1.5.1",
+    "less-plugin-clean-css": "^1.5.1",
     "minimist": "^1.1.1",
     "mocha": "^2.2.5",
     "parallelshell": "^1.1.1",
+    "react": "^0.13.3",
     "sinon": "^1.15.4",
     "sinon-chai": "^2.8.0",
     "style-loader": "^0.12.1",
     "url-loader": "^0.5.5",
-    "webpack": "^1.8.11"
+    "webpack": "^1.8.11",
+    "webpack-dev-server": "^1.14.0"
   },
   "engines": {
-    "node": ">= 0.10",
+    "node": ">= 4.0.0",
     "npm": ">= 2.1"
   }
 }

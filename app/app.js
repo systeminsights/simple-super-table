@@ -1,11 +1,10 @@
-/*eslint-disable no-undef */
-import './src/style.less';
+requier('./../src/style.less');
 
-import React from 'react';
-import R from 'ramda';
-import moment from 'moment';
+const React = require('react');
+const R = require('ramda');
+const moment = require('moment');
 
-import SampleData from './fixtures/sample-data.json';
+const SampleData = require('../fixtures/sample-data.json');
 
 const dateSorter = function(data, colKey) {
   return R.sort((a, b) => {
@@ -51,7 +50,7 @@ const columnRenderers = {
 };
 
 React.render(
-  <SimpleSuperTable.default
+  <SimpleSuperTable
     data={data}
     columns={columns}
     columnWidths={columnWidths}
