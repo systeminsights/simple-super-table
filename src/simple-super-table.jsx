@@ -1,4 +1,4 @@
-import React from 'react/addons';
+//import React from 'react/addons';
 const {LinkedStateMixin} = React.addons;
 import R from 'ramda';
 
@@ -54,6 +54,18 @@ const SimpleSuperTable = React.createClass({
       sortColKey: R.defaultTo(sortableColumns[0], this.props.defaultSortColumn),
       sortAscending: this.props.defaultSortAscending,
     };
+  },
+
+  componentDidMount: function componentDidMount() {
+    this.getDOMNode().querySelectorAll('.table-body')[0].addEventListener('scroll', this.handleTableBodyScroll);
+  },
+
+  componentWillUnmount: function componentWillUnmount() {
+    this.getDOMNode().querySelectorAll('.table-body')[0].removeEventListener('scroll', this.handleTableBodyScroll);
+  },
+
+  handleTableBodyScroll: function handleTableBodyScroll(e) {
+    this.getDOMNode().querySelectorAll('.table-header')[0].style.marginLeft = `${(-1 * e.currentTarget.scrollLeft)}px`;
   },
 
   render: function render() {
