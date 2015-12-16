@@ -1,8 +1,7 @@
-import SimpleSuperTable from './simple-super-table';
-import {filterTextHighlightRenderer, barRenderer} from './column-renderers';
+const SimpleSuperTable = require('./simple-super-table');
+const ColumnRenderers = require('./column-renderers');
 
-export default SimpleSuperTable;
-export const columnRenderers = {
-  filterTextHighlightRenderer: filterTextHighlightRenderer,
-  barRenderer: barRenderer,
+module.exports = {
+  SimpleSuperTable,
+  ColumnRenderers,
 };

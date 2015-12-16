@@ -1,12 +1,13 @@
-requier('./../src/style.less');
+require('./src/style.less');
 
 const React = require('react');
 const R = require('ramda');
 const moment = require('moment');
 
-const SampleData = require('../fixtures/sample-data.json');
+const SampleData = require('./fixtures/sample-data.json');
+const {SimpleSuperTable, ColumnRenderers} = require('./src');
 
-const dateSorter = function(data, colKey) {
+const dateSorter = function dateSorter(data, colKey) {
   return R.sort((a, b) => {
     return moment(R.prop(colKey, a), 'M/D/YY').valueOf() - moment(R.prop(colKey, b), 'M/D/YY').valueOf();
   })(data);
@@ -32,21 +33,21 @@ const columns = [
     ],
   },
 ];
-const columnWidths = {
-  orderDate: 125,
-  region: 100,
-  rep: 150,
-  item: 100,
-  units: 100,
-  unitCost: 100,
-  total: 300,
-};
 const primaryKeyGen = R.prop('orderDate');
 const columnSorters = {
   orderDate: dateSorter,
 };
 const columnRenderers = {
-  total: SimpleSuperTable.columnRenderers.barRenderer(0, 2000, 200, 20, R.always('#0000cc'), R.identity),
+  total: ColumnRenderers.barRenderer(0, 2000, 200, 20, R.always('#0000cc'), (_) => _),
+};
+const columnWidths = {
+  orderDate: 125,
+  region: 125,
+  rep: 300,
+  item: 125,
+  units: 125,
+  unitCost: 125,
+  total: 300,
 };
 
 React.render(
@@ -58,7 +59,6 @@ React.render(
     title={'Sales in 2015'}
     columnSorters={columnSorters}
     columnRenderers={columnRenderers}
-    onRowClick={(rowData) => console.log('row was clicked', rowData)}
   />,
   document.getElementById('component')
 );
