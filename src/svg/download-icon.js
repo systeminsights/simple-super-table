@@ -1,9 +1,8 @@
-import React from 'react';
-const T = React.PropTypes;
+const React = require('react');
 
 const DownloadIcon = React.createClass({
   propTypes: {
-    size: T.number,
+    size: React.PropTypes.number,
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -26,4 +25,4 @@ const DownloadIcon = React.createClass({
   },
 });
 
-export default DownloadIcon;
+module.exports = DownloadIcon;

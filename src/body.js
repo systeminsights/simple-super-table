@@ -1,7 +1,7 @@
-import React from 'react';
-import R from 'ramda';
+const React = require('react');
+const R = require('ramda');
 
-import renderHelpers from './render-helpers';
+const renderHelpers = require('./render-helpers');
 
 const Body = React.createClass({
   propTypes: {
@@ -36,4 +36,4 @@ const Body = React.createClass({
   },
 });
 
-export default Body;
+module.exports = Body;

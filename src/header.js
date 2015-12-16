@@ -1,8 +1,7 @@
-import React from 'react';
-const T = React.PropTypes;
-import R from 'ramda';
+const React = require('react');
+const R = require('ramda');
 
-import renderHelpers from './render-helpers';
+const renderHelpers = require('./render-helpers');
 
 const extractSpannedColumns = function extractSpannedColumns(columnsWithSpans) {
   const spannedColumns = [];
@@ -27,12 +26,12 @@ const extractSpannedColumns = function extractSpannedColumns(columnsWithSpans) {
 
 const Header = React.createClass({
   propTypes: {
-    columns: T.array.isRequired,
-    columnWidths: T.object.isRequired,
-    sortableColumns: T.array.isRequired,
-    sortColKey: T.string.isRequired,
-    sortAscending: T.bool.isRequired,
-    onHeaderClick: T.func.isRequired,
+    columns: React.PropTypes.array.isRequired,
+    columnWidths: React.PropTypes.object.isRequired,
+    sortableColumns: React.PropTypes.array.isRequired,
+    sortColKey: React.PropTypes.string.isRequired,
+    sortAscending: React.PropTypes.bool.isRequired,
+    onHeaderClick: React.PropTypes.func.isRequired,
   },
 
   render: function render() {
@@ -72,4 +71,4 @@ const Header = React.createClass({
   },
 });
 
-export default Header;
+module.exports = Header;

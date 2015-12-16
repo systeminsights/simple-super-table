@@ -1,11 +1,10 @@
-import React from 'react';
-const T = React.PropTypes;
+const React = require('react');
 
 const SortIcon = React.createClass({
   propTypes: {
-    size: T.number,
-    sorted: T.bool.isRequired,
-    ascending: T.bool.isRequired,
+    size: React.PropTypes.number,
+    sorted: React.PropTypes.bool.isRequired,
+    ascending: React.PropTypes.bool.isRequired,
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -31,4 +30,4 @@ const SortIcon = React.createClass({
   },
 });
 
-export default SortIcon;
+module.exports = SortIcon;

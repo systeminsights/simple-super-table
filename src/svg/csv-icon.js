@@ -1,9 +1,8 @@
-import React from 'react';
-const T = React.PropTypes;
+const React = require('react');
 
 const CsvIcon = React.createClass({
   propTypes: {
-    size: T.number,
+    size: React.PropTypes.number,
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -37,4 +36,4 @@ const CsvIcon = React.createClass({
   },
 });
 
-export default CsvIcon;
+module.exports = CsvIcon;

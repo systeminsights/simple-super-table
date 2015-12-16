@@ -1,14 +1,14 @@
-import React from 'react';
-import R from 'ramda';
-import d3Scale from 'd3-scale';
+const React = require('react');
+const R = require('ramda');
+const d3Scale = require('d3-scale');
 
-function escapeRegExp(str) {
+const escapeRegExp = function escapeRegExp(str) {
   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-}
+};
 
 // renderer for highlighting the filter text in the colData
 // exposes .filter-highlight CSS class
-export function filterTextHighlightRenderer(colData, _, __, filterText) {
+const filterTextHighlightRenderer = function filterTextHighlightRenderer(colData, _, __, filterText) {
   let children = null;
   if (R.isNil(colData) || R.isEmpty(colData)) {
     return <span className="filter-text-highlight">-</span>;
@@ -39,12 +39,12 @@ export function filterTextHighlightRenderer(colData, _, __, filterText) {
     children = _colData;
   }
   return <span className="filter-text-highlight">{children}</span>;
-}
+};
 
 // renderer for drawing horizontal bars.
 // exposes .bar CSS class
 // :: Number -> Number -> Number -> ((String|Number, Object) -> String) -> (String|Number) -> (a -> String) -> ReactElement
-export function barRenderer(minValue, maxValue, width, height, colorMapper, dataFormatter) {
+const barRenderer = function barRenderer(minValue, maxValue, width, height, colorMapper, dataFormatter) {
   const scale = d3Scale.linear().domain([minValue, maxValue]).range([0, width]);
 
   return (colData, rowData) => {
@@ -66,4 +66,9 @@ export function barRenderer(minValue, maxValue, width, height, colorMapper, data
       </div>
     );
   };
-}
+};
+
+module.exports = {
+  filterTextHighlightRenderer,
+  barRenderer,
+};

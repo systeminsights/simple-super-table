@@ -18,8 +18,6 @@ const GLOBALS = {
 const plugins = DEBUG ? [
   new webpack.DefinePlugin(GLOBALS),
   new webpack.optimize.OccurenceOrderPlugin(),
-  new webpack.HotModuleReplacementPlugin(),
-  new webpack.WatchIgnorePlugin(excludePaths),
 ] : [
   new webpack.DefinePlugin(GLOBALS),
   new webpack.optimize.OccurenceOrderPlugin(),
@@ -46,21 +44,19 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },
-  entry: './src/simple-super-table.js',
+  entry: './src/test.js',
   output: {
     library: true,
     libraryTarget: 'umd',
-    filename: './dist/dist.js',
+    filename: DEBUG ? './dist/dist.js' : './dist/dist.min.js',
+  },
+  externals: {
+    'React': 'React',
   },
   plugins: plugins,
-  resolveLoader: {
-    alias: {
-      'copy-index': 'file-loader?name=[path][name].[ext]&context=./app',
-    },
-  },
   module: {
     loaders: [{
-      test: /\.(js|jsx)$/,
+      test: /\.js$/,
       loader: 'babel',
       exclude: [/node_modules/],
     }, {

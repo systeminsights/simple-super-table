@@ -1,15 +1,15 @@
 const React = require('react/addons');
 const {LinkedStateMixin} = React.addons;
-import R from 'ramda';
+const R = require('ramda');
 
-import DownloadIcon from './svg/download-icon';
-import FilterIcon from './svg/filter-icon';
+const DownloadIcon = require('./svg/download-icon');
+const FilterIcon = require('./svg/filter-icon');
 
-import dataHelpers from './data-helpers';
-import {filterTextHighlightRenderer} from './column-renderers';
+const dataHelpers = require('./data-helpers');
+const {filterTextHighlightRenderer} = require('./column-renderers');
 
-import Header from './header';
-import Body from './body';
+const Header = require('./header');
+const Body = require('./body');
 
 const SimpleSuperTable = React.createClass({
   propTypes: {
@@ -26,7 +26,7 @@ const SimpleSuperTable = React.createClass({
     onColumnClick: React.PropTypes.func,
     rowClassGetter: React.PropTypes.func,
     columnClassGetter: React.PropTypes.func,
-    columnsSorters: React.PropTypes.object,
+    columnSorters: React.PropTypes.object,
     columnRenderers: React.PropTypes.object,
     title: React.PropTypes.string,
     messages: React.PropTypes.object,
@@ -65,6 +65,62 @@ const SimpleSuperTable = React.createClass({
 
   handleTableBodyScroll: function handleTableBodyScroll(e) {
     this.getDOMNode().querySelectorAll('.table-header')[0].style.marginLeft = `${(-1 * e.currentTarget.scrollLeft)}px`;
+  },
+
+  handleHeaderClick: function handleHeaderClick(e) {
+    const colKey = e.currentTarget.getAttribute('data-col-key');
+    if (R.isNil(this.props.sortableColumns) || R.contains(colKey, this.props.sortableColumns)) {
+      this.setState({
+        sortColKey: colKey,
+        sortAscending: this.state.sortColKey === colKey ? !this.state.sortAscending : true,
+      });
+    }
+  },
+
+  handleRowClick: function handleRowClick(e) {
+    if (!R.isNil(this.props.onRowClick)) {
+      const primaryKey = e.currentTarget.getAttribute('data-primary-key');
+      const foundRow = R.find((d) => R.equals(primaryKey, this.props.primaryKeyGen(d).toString()))(this.props.data);
+      if (!R.isNil(foundRow)) {
+        this.props.onRowClick(foundRow);
+      }
+    }
+  },
+
+  handleColumnClick: function handleColumnClick(e) {
+    if (!R.isNil(this.props.onColumnClick)) {
+      e.stopPropagation();
+      const colKey = e.currentTarget.getAttribute('data-col-key');
+      const primaryKey = e.currentTarget.getAttribute('data-primary-key');
+      const foundRow = R.find((d) => R.equals(primaryKey, this.props.primaryKeyGen(d)))(this.props.data);
+      if (!R.isNil(foundRow)) {
+        this.props.onColumnClick(foundRow[colKey], foundRow, colKey);
+      }
+    }
+  },
+
+  handleFilteredCSVClick: function handleFilteredCSVClick() {
+    const colKeys = dataHelpers.extractColKeys(R.defaultTo(this.props.columns, this.props.columnsForDownload));
+    const filterableColumns = R.defaultTo(colKeys, this.props.filterableColumns);
+    const filteredData = R.ifElse(
+      R.isEmpty,
+      () => this.props.data,
+      () => dataHelpers.filterData(filterableColumns, this.state.filterText, this.props.data)
+    )(filterableColumns);
+    const sortedFilteredData = dataHelpers.sortData(this.state.sortColKey, this.state.sortAscending, filteredData);
+    dataHelpers.pushDataForDownload(
+      R.isEmpty(this.props.title) ? 'file' : this.props.title,
+      R.defaultTo(this.props.columns, this.props.columnsForDownload),
+      sortedFilteredData
+    );
+  },
+
+  handleOriginalCSVClick: function handleOriginalCSVClick() {
+    dataHelpers.pushDataForDownload(
+      R.isEmpty(this.props.title) ? 'file' : this.props.title,
+      R.defaultTo(this.props.columns, this.props.columnsForDownload),
+      this.props.data
+    );
   },
 
   render: function render() {
@@ -111,7 +167,9 @@ const SimpleSuperTable = React.createClass({
     const sortableColumns = R.defaultTo(dataHelpers.extractColKeys(this.props.columns), this.props.sortableColumns);
     const clickableClassName = (() => {
       if (R.isNil(this.props.onColumnClick)) {
-        if (R.isNil(this.props.onRowClick)) { return ''; }
+        if (R.isNil(this.props.onRowClick)) {
+          return '';
+        }
         return 'row-clickable';
       }
       return 'col-clickable';
@@ -192,63 +250,6 @@ const SimpleSuperTable = React.createClass({
           {messageContainer}
         </div>
       </div>
-    );
-  },
-
-  handleHeaderClick: function handleHeaderClick(e) {
-    const colKey = e.currentTarget.getAttribute('data-col-key');
-    if (R.isNil(this.props.sortableColumns) || R.contains(colKey, this.props.sortableColumns)) {
-      this.setState({
-        sortColKey: colKey,
-        sortAscending: this.state.sortColKey === colKey ? !this.state.sortAscending : true,
-      });
-    }
-  },
-
-  handleRowClick: function handleRowClick(e) {
-    console.log('handling row click in sst.js');
-    if (!R.isNil(this.props.onRowClick)) {
-      const primaryKey = e.currentTarget.getAttribute('data-primary-key');
-      const foundRow = R.find((d) => R.equals(primaryKey, this.props.primaryKeyGen(d).toString()))(this.props.data);
-      if (!R.isNil(foundRow)) {
-        this.props.onRowClick(foundRow);
-      }
-    }
-  },
-
-  handleColumnClick: function handleColumnClick(e) {
-    if (!R.isNil(this.props.onColumnClick)) {
-      e.stopPropagation();
-      const colKey = e.currentTarget.getAttribute('data-col-key');
-      const primaryKey = e.currentTarget.getAttribute('data-primary-key');
-      const foundRow = R.find((d) => R.equals(primaryKey, this.props.primaryKeyGen(d)))(this.props.data);
-      if (!R.isNil(foundRow)) {
-        this.props.onColumnClick(foundRow[colKey], foundRow, colKey);
-      }
-    }
-  },
-
-  handleFilteredCSVClick: function handleFilteredCSVClick() {
-    const colKeys = dataHelpers.extractColKeys(R.defaultTo(this.props.columns, this.props.columnsForDownload));
-    const filterableColumns = R.defaultTo(colKeys, this.props.filterableColumns);
-    const filteredData = R.ifElse(
-      R.isEmpty,
-      () => this.props.data,
-      () => dataHelpers.filterData(filterableColumns, this.state.filterText, this.props.data)
-    )(filterableColumns);
-    const sortedFilteredData = dataHelpers.sortData(this.state.sortColKey, this.state.sortAscending, filteredData);
-    dataHelpers.pushDataForDownload(
-      R.isEmpty(this.props.title) ? 'file' : this.props.title,
-      R.defaultTo(this.props.columns, this.props.columnsForDownload),
-      sortedFilteredData
-    );
-  },
-
-  handleOriginalCSVClick: function handleOriginalCSVClick() {
-    dataHelpers.pushDataForDownload(
-      R.isEmpty(this.props.title) ? 'file' : this.props.title,
-      R.defaultTo(this.props.columns, this.props.columnsForDownload),
-      this.props.data
     );
   },
 });
