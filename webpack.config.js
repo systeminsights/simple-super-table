@@ -34,6 +34,9 @@ const lessPlugins = DEBUG ? [
 
 console.log('Webpack DEBUG: ', DEBUG);
 
+const outputPath = path.join(__dirname, './dist/');
+console.log(outputPath);
+
 module.exports = {
   debug: DEBUG,
   devtool: DEBUG ? 'eval' : false,
@@ -42,16 +45,17 @@ module.exports = {
     reasons: DEBUG,
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['', '.js'],
   },
-  entry: './src/test.js',
+  entry: './index.js',
   output: {
-    library: true,
+    path: outputPath,
+    library: 'SimpleSuperTable',
     libraryTarget: 'umd',
-    filename: DEBUG ? './dist/dist.js' : './dist/dist.min.js',
+    filename: DEBUG ? 'dist.js' : 'dist.min.js',
   },
   externals: {
-    'React': 'React',
+    react: 'React',
   },
   plugins: plugins,
   module: {
