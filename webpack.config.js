@@ -9,6 +9,9 @@ const argv = require('minimist')(process.argv.slice(2));
 
 const DEBUG = !argv.release;
 
+console.log('DEBUG MODE: ', DEBUG);
+
+
 const AUTOPREFIXER_LOADER = 'autoprefixer-loader?{browsers:[' +
   '"Android 2.3", "Android >= 4", "Chrome >= 20", "Firefox >= 24", ' +
   '"Explorer >= 8", "iOS >= 6", "Opera >= 12", "Safari >= 6"]}';
@@ -65,13 +68,6 @@ const config = {
   },
 
   module: {
-    /*preLoaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'eslint-loader',
-      },
-    ],*/
     loaders: [
       {
         test: /\.css$/,
@@ -98,7 +94,7 @@ const config = {
         loader: 'url-loader?limit=10000&mimetype=image/svg+xml',
       },
       {
-        test: /\.js?$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
       },

@@ -2,6 +2,8 @@ const React = require('react/addons');
 const {LinkedStateMixin} = React.addons;
 const R = require('ramda');
 
+console.log('React version in SST: ', React.version);
+
 const DownloadIcon = require('./svg/download-icon');
 const FilterIcon = require('./svg/filter-icon');
 
