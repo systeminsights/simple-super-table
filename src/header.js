@@ -37,26 +37,26 @@ const Header = React.createClass({
   render: function render() {
     const {columns} = extractSpannedColumns(this.props.columns);
 
+    const spannedColumns = R.map((c) => {
+      const width = R.has('span', c) ? R.compose(
+        R.reduce(R.add)(0),
+        R.map((keys) => this.props.columnWidths[R.head(keys)]),
+        R.map(R.keys))(c.columns) : this.props.columnWidths[R.head(R.keys(c))];
+
+      return (
+        <div key={R.has('span', c) ? c.span : R.head(R.keys(c))}
+             className="col"
+             style={{minWidth: width, maxWidth: width}}>
+          <div className="content">
+            <div className="header">{R.has('span', c) ? c.span : ''}</div>
+          </div>
+        </div>
+      );
+    })(this.props.columns);
+
     return (
       <div className="table-header">
-        <div className="row">
-          {R.map((c) => {
-            const width = R.has('span', c) ? R.compose(
-              R.reduce(R.add)(0),
-              R.map((keys) => this.props.columnWidths[R.head(keys)]),
-              R.map(R.keys))(c.columns) : this.props.columnWidths[R.head(R.keys(c))];
-
-            return (
-              <div key={R.has('span', c) ? c.span : R.head(R.keys(c))}
-                   className="col"
-                   style={{minWidth: width, maxWidth: width}}>
-                <div className="content">
-                  <div className="header">{R.has('span', c) ? c.span : ''}</div>
-                </div>
-              </div>
-            );
-          })(this.props.columns)}
-        </div>
+        {R.find(R.has('span'))(this.props.columns) ? <div className="row">{spannedColumns}</div> : null}
         <div className="row">
           {R.map(renderHelpers.renderHeader(
             this.props.columnWidths,
