@@ -31,7 +31,6 @@ const renderHeader = function renderHeader(columnWidths, onClickHandler, sortabl
 
 // :: Object -> String -> fn -> String -> fn -> {k: fn} -> filterText -> ReactElement
 const renderCol = function renderCol(rowData, columnWidths, primaryKey, onColumnClickHandler, columnClassGetter, columnRenderers, filterText) {
-  // TODO: onClick
   return (colKey) => {
     return (
       <div
@@ -40,6 +39,7 @@ const renderCol = function renderCol(rowData, columnWidths, primaryKey, onColumn
         className={`col ${colKey} ${columnClassGetter(rowData[colKey], rowData, colKey)}`}
         data-col-key={colKey}
         data-primary-key={primaryKey}
+        onClick={onColumnClickHandler}
       >
         <div
           className="content">{R.has(colKey, columnRenderers) ? columnRenderers[colKey](rowData[colKey], rowData, colKey, filterText) : R.ifElse(R.anyPass([R.isNil, R.isEmpty]), R.always('-'), (_) => _)(rowData[colKey])}</div>
@@ -50,7 +50,6 @@ const renderCol = function renderCol(rowData, columnWidths, primaryKey, onColumn
 
 // :: ((Object) -> String) -> [String] -> fn -> fn -> fn -> fn -> {k: fn} -> Object -> String -> ReactElement
 const renderRow = function renderRow(primaryKeyGen, colKeys, columnWidths, onRowClickHandler, onColumnClickHandler, rowClassGetter, columnClassGetter, columnRenderers, filterText) {
-  // TODO: onClick
   return (rowData) => {
     const totalWidth = R.reduce(R.add)(0)(R.values(columnWidths));
 
@@ -60,6 +59,7 @@ const renderRow = function renderRow(primaryKeyGen, colKeys, columnWidths, onRow
         className={`row ${rowClassGetter(rowData)}`}
         style={{minWidth: totalWidth}}
         data-primary-key={primaryKeyGen(rowData)}
+        onClick={onRowClickHandler}
       >{R.map(renderCol(
         rowData,
         columnWidths,
