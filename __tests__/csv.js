@@ -54,6 +54,79 @@ describe('CSV export', function() {
     });
   });
 
+  describe('empty download columns', function() {
+    const mockLink = {
+      setAttribute: sinon.stub(),
+      click: sinon.stub(),
+    };
+    let createElement = null;
+
+    beforeEach(function() {
+      renderTree = TU.renderIntoDocument(
+        <SimpleSuperTable
+          data={data}
+          columns={columns}
+          columnsForDownload={[]}
+          columnWidths={{a: 10, b: 10, c: 10}}
+          primaryKeyGen={primaryKeyGen}
+          title={title}
+        />
+      );
+      createElement = sinon.stub(document, 'createElement').returns(mockLink);
+    });
+
+    afterEach(function() {
+      React.unmountComponentAtNode(document.body);
+      createElement.restore();
+      mockLink.setAttribute.reset();
+      mockLink.click.reset();
+    });
+
+    it('should disable original csv button', function() {
+      const originalCSVButton = TU.findRenderedDOMComponentWithClass(renderTree, 'original-csv');
+      expect(originalCSVButton.getDOMNode().className).to.contain('disabled');
+      TU.Simulate.click(originalCSVButton);
+      expect(document.createElement).not.to.have.been.calledWith('a');
+      expect(mockLink.setAttribute).not.to.have.been.calledWith('href');
+      expect(mockLink.setAttribute).not.to.have.been.calledWith('download', 'Test Table.csv');
+    });
+  });
+
+  describe.skip('export filtered csv', function() {
+    const mockLink = {
+      setAttribute: sinon.stub(),
+      click: sinon.stub(),
+    };
+    let createElement = null;
+
+    beforeEach(function() {
+      renderTree = TU.renderIntoDocument(
+        <SimpleSuperTable
+          data={data}
+          columns={columns}
+          primaryKeyGen={primaryKeyGen}
+          title={title}
+        />
+      );
+      createElement = sinon.stub(document, 'createElement').returns(mockLink);
+    });
+
+    afterEach(function() {
+      React.unmountComponentAtNode(document.body);
+      createElement.restore();
+      mockLink.setAttribute.reset();
+      mockLink.click.reset();
+    });
+
+    it('should invoke download', function() {
+      const filterCSVButton = TU.findRenderedDOMComponentWithClass(renderTree, 'csv-filter');
+      TU.Simulate.click(filterCSVButton);
+      expect(document.createElement).to.have.been.calledWith('a');
+      expect(mockLink.setAttribute).to.have.been.calledWith('href'); // TODO: Verify the passed CSV data
+      expect(mockLink.setAttribute).to.have.been.calledWith('download', 'Test Table.csv');
+    });
+  });
+
   describe.skip('export filtered csv', function() {
     const mockLink = {
       setAttribute: sinon.stub(),
