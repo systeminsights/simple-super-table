@@ -93,6 +93,21 @@ div.simple-super-table {
     flex: 1;
     overflow: hidden;
 
+    div.message-container {
+      display: flex;
+      flex: 1;
+      flex-shrink: 0;
+      margin: auto;
+
+      h3.no-data-message,
+      h3.no-matching-data-message {
+        margin: 1.5em auto;
+        text-align: center;
+        font-size: 1.5em;
+        color: #777777;
+      }
+    }
+
     .table {
       padding: 0;
       margin: 0;
@@ -185,20 +200,6 @@ div.simple-super-table {
               border: 1px solid @borderColor;
             }
           }
-        }
-      }
-
-      div.message-container {
-        display: flex;
-        flex: 1;
-        flex-shrink: 0;
-
-        h3.no-data-message,
-        h3.no-matching-data-message {
-          margin: auto;
-          text-align: center;
-          font-size: 0.95em;
-          color: #777777;
         }
       }
     }
