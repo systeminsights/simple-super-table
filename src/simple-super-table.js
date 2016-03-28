@@ -221,7 +221,7 @@ const SimpleSuperTable = React.createClass({
             <div
               className={`original-csv ${(R.isEmpty(this.props.data) || R.isEmpty(this.props.columnsForDownload))? 'disabled' : ''}`}
               onClick={(R.isEmpty(this.props.data) || R.isEmpty(this.props.columnsForDownload)) ? null : this.handleOriginalCSVClick}
-            ><DownloadIcon size={18}/></div>
+            ><DownloadIcon size={14}/></div>
           </div>
         </div>
         <div className="table-container">
