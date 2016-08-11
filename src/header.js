@@ -32,6 +32,7 @@ const Header = React.createClass({
     sortColKey: React.PropTypes.string.isRequired,
     sortAscending: React.PropTypes.bool.isRequired,
     onHeaderClick: React.PropTypes.func.isRequired,
+    headerRenderers: React.PropTypes.object,
   },
 
   render: function render() {
@@ -63,7 +64,8 @@ const Header = React.createClass({
             this.props.onHeaderClick,
             this.props.sortableColumns,
             this.props.sortColKey,
-            this.props.sortAscending
+            this.props.sortAscending,
+            this.props.headerRenderers
           ))(columns)}
         </div>
       </div>

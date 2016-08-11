@@ -39,6 +39,7 @@ const data = [
 // ...
 ];
 ```
+
 ### columns
 
 **Required**, array of objects. Orders the column to display and each key value
@@ -119,6 +120,20 @@ const columnRenderers = {
   col1: function(colData, rowData, colKey, filterText) {
     // text or react component.  
     return <h1>colData</h1>;
+  }
+};
+```
+
+### headerRenderers
+
+Optional, object. Custom renderer functions for column headers. Expects the key to be
+column keys and values to be functions. The function will be invoked with
+column key, sort ascending, and the width of the column.
+
+```js
+const headerRenderers = {
+  col1: function(colKey, sortAscending, colWidth) {
+    return <h1>Col 1</h1>;
   }
 };
 ```

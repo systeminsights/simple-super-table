@@ -50,6 +50,10 @@ const columnWidths = {
   total: 300,
 };
 
+const headerRenderers = {
+  total: R.always(<h1>TOTAL</h1>),
+};
+
 React.render(
   <SimpleSuperTable
     data={data}
@@ -59,6 +63,7 @@ React.render(
     title={'Sales in 2015'}
     columnSorters={columnSorters}
     columnRenderers={columnRenderers}
+    headerRenderers={headerRenderers}
   />,
   document.getElementById('component')
 );

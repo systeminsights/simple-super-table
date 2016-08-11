@@ -27,7 +27,8 @@ const SimpleSuperTable = React.createClass({
     rowClassGetter: React.PropTypes.func,
     columnClassGetter: React.PropTypes.func,
     columnSorters: React.PropTypes.object,
-    columnRenderers: React.PropTypes.object,
+    headerRenderers: React.PropTypes.object,
+    customHeaders: React.PropTypes.object,
     title: React.PropTypes.string,
     messages: React.PropTypes.object,
   },
@@ -233,6 +234,7 @@ const SimpleSuperTable = React.createClass({
               sortColKey={this.state.sortColKey}
               sortAscending={this.state.sortAscending}
               onHeaderClick={this.handleHeaderClick}
+              headerRenderers={this.props.headerRenderers}
             />
             <Body
               data={sortedFilteredData}
