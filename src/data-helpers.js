@@ -39,9 +39,11 @@ const pushDataForDownload = function pushDataForDownload(fileName, columns, data
   const fieldNames = extractColValues(columns);
 
   json2csv({data: data, fields: fields, fieldNames: fieldNames}, (err, csv) => {
-    const encodedUri = encodeURI(`data:text/csv;charset=utf-8,${csv}`);
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
+    link.setAttribute(
+        "href",
+        URL.createObjectURL(new Blob([csv], { type: "text/csv;encoding:utf-8" }))
+    );
     link.setAttribute('download', `${fileName}.csv`);
     link.click();
   });

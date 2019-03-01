@@ -46,6 +46,8 @@ describe('CSV export', function() {
     });
 
     it('should invoke download', function() {
+      global.Blob = function Blob(csv) {return csv[0]}
+      global.URL = { createObjectURL: function(input) {return input} }
       const originalCSVButton = TU.findRenderedDOMComponentWithClass(renderTree, 'original-csv');
       TU.Simulate.click(originalCSVButton);
       expect(document.createElement).to.have.been.calledWith('a');
